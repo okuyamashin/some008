@@ -75,7 +75,7 @@ def spread(p):
         links = [choice_link("気を取り直して、やり直す", p["back"], back=True)]
     elif kind == "ending":
         tail = '<p class="end">——めでたし、めでたし</p>'
-        links = ['<a href="#intro" data-dir="back"><span class="mark">◆</span>最初から読む</a>']
+        links = ['<a href="#cover" data-dir="back"><span class="mark">◆</span>最初から読む</a>']
     img = webp_data_uri(p["image"], QUALITY_MONO)
     return f"""
 <section tabindex="-1" class="spread {kind}" id="p{n}" aria-label="パラグラフ{n}">
@@ -378,7 +378,7 @@ def en_spread(p):
         links = [en_choice("Take heart and try again", p["back"], back=True)]
     else:
         tail = '<p class="end finis">Finis.</p>'
-        links = ['<a href="#intro" data-dir="back"><span class="hand">☞</span> To begin anew, turn back to the first page.</a>']
+        links = ['<a href="#cover" data-dir="back"><span class="hand">☞</span> To begin anew, turn back to the cover.</a>']
     img = webp_data_uri(p["image"], QUALITY_MONO)
     return f"""
 <section tabindex="-1" class="spread {kind}" id="p{n}" aria-label="Passage {n}">
