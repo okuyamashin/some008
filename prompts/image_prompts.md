@@ -81,6 +81,13 @@ Vertical portrait composition for a book page.
 Open white space around the edges so the image sits on the page like a printed vignette.
 ```
 
+表紙だけは [Frame] の代わりに [Cover Frame] を使います。
+
+```text
+[Cover Frame]
+Vertical portrait composition for a book cover, painted all the way to the edges with no white margin.
+```
+
 ## 場面ごとのブロック
 
 | ファイル名 | 場面 | Sword | Tone | 状態 |
@@ -104,7 +111,7 @@ Open white space around the edges so the image sits on the page like a printed v
 
 ### 00_cover　表紙
 
-[Cover Style] + [Hero] + [Sword: holy] + 以下 + [Frame]
+[Cover Style] + [Hero] + [Sword: holy] + 以下 + [Cover Frame]
 
 ```text
 [Scene]
