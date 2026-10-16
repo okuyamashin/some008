@@ -692,7 +692,10 @@ PAGE_JS = """
     const f = document.createElement("div");
     const kinds = [...spread.classList].filter((c) => !["spread", "current", "leaving"].includes(c));
     f.className = ["face", ...kinds, back ? "back" : ""].join(" ");
-    f.append(page.cloneNode(true));
+    // 余白は % 指定で、基準が見開きの幅。複製では 1 ページ分の幅が基準になってずれるので、実際の値を写す。
+    const copy = page.cloneNode(true);
+    copy.style.padding = getComputedStyle(page).padding;
+    f.append(copy);
     const shade = document.createElement("div");
     shade.className = "shade";
     f.append(shade);
