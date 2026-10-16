@@ -8,3 +8,7 @@
 
 # Original generated images (keep locally only)
 images/raw/
+
+# Build outputs
+build/
+dist/
