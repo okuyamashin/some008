@@ -1,0 +1,328 @@
+# Early Modern English flavor
+#
+# Same structure as story.toml (numbers, kinds, images, links).
+# Choice labels are completed as "<label>, turn to <n>."
+# Mood over correctness: modern spelling, archaic grammar where it sounds good.
+
+[book]
+title_main = "The Whispering Wood"
+title_sub = "and the Moon Horn"
+subtitle = "A Gamebook wherein Thou Art the Hero"
+title_page_text = "Being a True and Most Wondrous Account of a Traveller's Journey to the King of Wolves; wherein Thou Thyself art the Hero, and must Choose thy Path."
+author = "Shin Okuyama"
+year = "MMXXVI"
+copyright = "© 2026 Shin Okuyama"
+cover_image = "00_cover_v1"
+how_to_play = """
+In this book, thou art the hero.
+
+At the close of each passage thou shalt be offered a choice. Choose but one, and turn to the passage whose number is shown.
+
+Shouldst thou choose amiss, thine adventure may come to an untimely end. Fear not: take heart, and thou mayest return to the place where thou didst stray.
+
+Now let thine adventure begin. Thy journey starteth in a small village at the edge of a deep wood.
+"""
+
+[[paragraph]]
+number = 1
+key = "01c_choice"
+kind = "choice"
+image = "01c_choice_v1"
+text = """
+Thou art a traveller far from home, and in the course of thy wanderings thou comest unto a small village at the edge of a deep wood. Every door is shut fast, and boards are nailed across the windows.
+
+As thou seekest an inn, a bent old elder stayeth thee in the street.
+
+"Good traveller, I pray thee, lend us thine aid. The King of Wolves, who dwelleth deep in the wood, hath shut the forest against us this month past. The woodcutters dare not enter, and by night the howling closeth round the village. If this continue, our firewood and our bread shall both be spent."
+
+From the wood behind him cometh a rustling of leaves, though there is no wind, as if someone were whispering.
+
+Thou hast naught but thy worn travelling gear. Yet the elder looketh upon thee with beseeching eyes.
+"""
+choices = [
+  { label = "If thou wilt take up his cause", to = 7 },
+  { label = "If thou wouldst courteously decline", to = 12 },
+]
+
+[[paragraph]]
+number = 7
+key = "01r_result"
+kind = "result"
+image = "01r_result_v1"
+text = """
+"Thou wilt go? Heaven be praised!"
+
+The elder bringeth thee into his house and taketh from an old chest a horn, finely carved from the horn of some beast. Yet a great crack runneth down its middle.
+
+"This horn hath been handed down in our village since time out of mind. Since it cracked, no man can draw a note from it. Yet if thou wouldst meet the King of Wolves, take it with thee."
+
+Then he lowereth his voice.
+
+"Mark this also. That forest is called the Whispering Wood. Though the whispers show thee the way, give them no ear. They will but lead thee astray."
+
+Thou takest the horn, and at break of day thou settest out for the wood.
+"""
+choices = [
+  { label = "To enter the wood", to = 4 },
+]
+
+[[paragraph]]
+number = 12
+key = "01b_bad"
+kind = "bad"
+image = "01b_bad_v1"
+back = 1
+text = """
+"So be it," saith the elder, and he shutteth his door.
+
+Yet the only road to the next town runneth through the wood, and so thou must needs tarry in the village a while.
+
+That night a howling ariseth from the forest. Being unable to sleep, thou fallest to singing along with it. Of a sudden the howling ceaseth, and the wood groweth still.
+
+The next night, and the night after, the wolves fall silent whenever thou singest. In time the villagers name thee the Wolves' Lullaby-Singer.
+
+Twenty years have passed. Every night thou singest thy lullaby toward the wood, for the wolves, it seemeth, can no longer sleep without it.
+"""
+
+[[paragraph]]
+number = 4
+key = "02c_choice"
+kind = "choice"
+image = "02c_choice_v1"
+text = """
+No sooner art thou within the wood than the path groweth narrow, and the boughs twine overhead to hide the sky. From nowhere and everywhere come whispering voices.
+
+"To the right... go thou to the right..." "Come not near the spring..."
+
+The voices are at thine very ear, yet when thou turnest, there is no one.
+
+Anon the path divideth. The right-hand way is broad and easy, and the whispers urge thee toward it without ceasing. At the end of the narrow left-hand way, though it be broad day, falleth a light like moonlight, and a little spring sparkleth there.
+
+The horn in thy bosom seemeth to grow faintly warm, as though it answered the light of the spring.
+"""
+choices = [
+  { label = "If thou wouldst heed the whispers and take the right-hand way", to = 14 },
+  { label = "If thou wilt defy the whispers and go to the spring", to = 10 },
+]
+
+[[paragraph]]
+number = 10
+key = "02r_result"
+kind = "result"
+image = "02r_result_v1"
+text = """
+Thou shakest off the whispers and takest the narrow left-hand way. "No... no..." they murmur, ever fainter as thou drawest near the spring, until they are heard no more.
+
+The water shineth white, as if moonlight were melted in it. Thou takest out the horn and dippest it gently in.
+
+Light floweth into the crack, and the wound closeth into a seam of silver before thine eyes. When thou liftest it out, the horn gloweth softly with the light of the moon.
+
+Thou hast gained the Moon Horn!
+
+Thou breathest into it gently, and a clear note ringeth through the wood. In that instant the whispers become words thou canst understand.
+
+"Child of men. To the King's sentinels, sound it thrice, and short."
+"""
+choices = [
+  { label = "To press on into the heart of the wood", to = 9 },
+]
+
+[[paragraph]]
+number = 14
+key = "02b_bad"
+kind = "bad"
+image = "02b_bad_v1"
+back = 4
+text = """
+Thou heedest the whispers and takest the broad right-hand way.
+
+After a while thou comest upon a stump that seemeth familiar. Further on, the selfsame stump. The whispers giggle and say again, "To the right... go thou to the right..."
+
+Three days and three nights thou walkest round that stump. On the fourth day thou givest it a name; on the fifth, thou fallest to passing the time of day with it.
+
+When a year is gone, thou art quite at home in the wood. Now thou too hidest in the shadows, and whisperest into the ear of every lost traveller:
+
+"To the right... go thou to the right..."
+
+The Whispering Wood hath one voice more.
+"""
+
+[[paragraph]]
+number = 9
+key = "03c_choice"
+kind = "choice"
+image = "03c_choice_v1"
+text = """
+Deeper in the wood, a mighty fallen tree spanneth the path like an arch. Beneath it sit two grey wolves, still as stone. These must be the sentinels of the vale where the King of Wolves dwelleth.
+
+Espying thee, they growl low, and their fangs glint.
+
+Looking about, thou seest stones of a goodly size at thy feet. Cast one far off, and mayhap the wolves would chase after it.
+
+Yet the Moon Horn in thy bosom is warm, as though it awaited its hour. The words thou heardest at the spring come back to thee.
+
+Never taking their eyes from thee, the wolves slowly rise to their feet.
+"""
+choices = [
+  { label = "If thou wouldst cast a stone far off to distract them", to = 13 },
+  { label = "If thou wilt sound the horn thrice, and short", to = 2 },
+]
+
+[[paragraph]]
+number = 2
+key = "03r_result"
+kind = "result"
+image = "03r_result_v1"
+text = """
+Thou settest the Moon Horn to thy lips and soundest it thrice, and short.
+
+As the clear notes ring through the wood, the two wolves cease their growling. Their ears prick up, and they look one upon the other.
+
+Then one cometh forward and smelleth the horn in thy hand. With its nose it nudgeth thy hand gently, and pointeth to the way beneath the fallen tree. The other goeth before thee, looking back now and again to see that thou followest.
+
+It seemeth the sound of the horn was a greeting unto the wolves.
+
+As they lead thee on, the trees grow ever taller and the wood ever quieter. The whispers that followed thee all this while are heard no more.
+"""
+choices = [
+  { label = "To follow the wolves", to = 6 },
+]
+
+[[paragraph]]
+number = 13
+key = "03b_bad"
+kind = "bad"
+image = "03b_bad_v1"
+back = 9
+text = """
+Thou takest up a goodly stone and flingest it as far as thou canst.
+
+The two wolves brighten and bound away after it. The ruse hath worked! But as thou stoopest to pass beneath the tree, back they come with the stone in their jaws, and drop it at thy feet.
+
+Wagging their tails fit to break, they gaze up at thee full of hope.
+
+Thou throwest it again. They bring it back. Again thou throwest. Again they bring it back. Night falleth, and still they tire not. Hearing the news, the rest of the pack cometh to join them.
+
+Now thou art the pack's own Stone-Thrower, casting stones from morning till night. Thine arm hath grown wondrous strong.
+"""
+
+[[paragraph]]
+number = 6
+key = "04c_choice"
+kind = "choice"
+image = "04c_choice_v1"
+text = """
+The wolves lead thee down into the vale, and thou comest to a mossy glade. There little folk in pointed caps sit in a ring, holding a feast.
+
+"Welcome, traveller! Come, eat and drink with us!"
+
+A pie of nuts, cakes of honey, a steaming soup of mushrooms. All look wondrous good.
+
+Yet thou markest that thy wolf guides have stopped short of the glade, heads low, and will come no nearer. And beneath the feet of the little folk there falleth not a single shadow.
+
+"Come, come, be not shy."
+
+A little man holdeth out to thee a bowl brimming with soup.
+"""
+choices = [
+  { label = "If thou wilt join the feast and drink the soup", to = 3 },
+  { label = "If thou wouldst thank them and hasten on", to = 11 },
+]
+
+[[paragraph]]
+number = 11
+key = "04r_result"
+kind = "result"
+image = "04r_result_v1"
+text = """
+"I thank you, but I must hasten on."
+
+Thou bowest courteously, and the little folk look at one another, much put out. In the blink of an eye, the feast is gone.
+
+All that remaineth is a ring of white mushrooms and a mossy stump. What thou tookest for a pie is but a heap of pine cones.
+
+The wolves run to thee and lick thy hand, as if to say they are glad thou art unharmed.
+
+From deep in the vale cometh a long, low howl, a voice that maketh every tree in the wood to tremble. The wolves lay back their ears and look up at thee. Beyond lieth the King of Wolves.
+"""
+choices = [
+  { label = "To go on into the depths of the vale", to = 15 },
+]
+
+[[paragraph]]
+number = 3
+key = "04b_bad"
+kind = "bad"
+image = "04b_bad_v1"
+back = 6
+text = """
+Thou takest the bowl and sippest the mushroom soup. It is delicious beyond words.
+
+Of a sudden the world about thee groweth larger and larger. The pie is like a boulder, the bowl like a pond. Nay, it is thou that hast grown small.
+
+"Welcome, new friend!" cry the little folk, and toss thee aloft for joy.
+
+From that day forth thou joinest their feast every night. The little folk never miss a night of feasting, and it is the rule that the newest of them must wash up.
+
+Tonight, as every night, thou washest a mountain of dishes. The little folk tell thee that half the dishes from a feast a hundred years ago are yet unwashed.
+"""
+
+[[paragraph]]
+number = 15
+key = "05c_choice"
+kind = "choice"
+image = "05c_choice_v1"
+text = """
+In the depths of the vale lieth a quiet glade where the moonlight falleth. Upon a great rock in its midst sitteth a grey wolf so huge thou must crane thy neck to see him. It is the King of Wolves, and his pack standeth all about.
+
+The King looketh down upon thee with golden eyes, and in them dwelleth not so much wrath as a deep sorrow.
+
+"Child of men, why art thou come? Men broke the ancient pact. Therefore have I shut the wood."
+
+As one, the wolves growl and bare their fangs.
+
+In that moment the Moon Horn in thy bosom beginneth to glow softly in the moonlight. Was not this horn handed down in the village since time out of mind?
+"""
+choices = [
+  { label = "If thou wouldst spring upon the King of Wolves", to = 5 },
+  { label = "If thou wilt sound the Moon Horn aloud", to = 8 },
+]
+
+[[paragraph]]
+number = 8
+key = "05r_ending"
+kind = "ending"
+image = "05r_ending_v1"
+text = """
+Thou settest the Moon Horn to thy lips and blowest with all thy breath.
+
+The clear note ringeth through the moonlit vale. The pack ceaseth its growling, and the King of Wolves closeth his eyes.
+
+"That sound... I had forgotten it."
+
+Long ago, the village and the wolves made a pact. The village would not despoil the wood; the wolves would guard the village. The horn was the token of that pact. When the village forgot its promise and the horn cracked, the wolves too shut their hearts.
+
+Some days hence, thou leadest the King of Wolves to the village. Hearing the horn, the elder weepeth and boweth low.
+
+Thus was the pact renewed, and the bounty of the wood returned to the village. Now the nightly howling is the village's lullaby.
+"""
+
+[[paragraph]]
+number = 5
+key = "05b_bad"
+kind = "bad"
+image = "05b_bad_v1"
+back = 15
+text = """
+With a great cry, thou springest at the King of Wolves.
+
+The King stepeth lightly aside. Carried on by thine own rush, thou tumblest into the grass, right on top of the cubs that were playing there.
+
+The cubs are overjoyed. A new plaything hath come!
+
+They nibble thine ears, climb upon thy back, and drag thee about like a blanket. When thou triest to flee, the whole litter giveth chase. The King of Wolves watcheth, and yawneth wide.
+
+Many years have passed. In the village it is still whispered that a traveller is being raised by wolves deep in the wood.
+
+In truth, of course, it is thou that art raising the cubs.
+"""
