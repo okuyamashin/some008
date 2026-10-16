@@ -1,0 +1,322 @@
+# The Dragon's Labyrinth and the Rusted Sword — Early Modern English flavor
+#
+# Same structure as story.toml (numbers, kinds, images, links).
+# Choice labels are completed as "<label>, turn to <n>."
+# Mood over correctness: modern spelling, archaic grammar where it sounds good.
+
+[book]
+title_main = "The Dragon's Labyrinth"
+title_sub = "and the Rusted Sword"
+subtitle = "A Gamebook wherein Thou Art the Hero"
+title_page_text = "Being a True and Most Perilous Account of a Traveller's Quest against a Black Dragon; wherein Thou Thyself art the Hero, and must Choose thy Path."
+author = "Shin Okuyama"
+year = "MMXXVI"
+copyright = "© 2026 Shin Okuyama"
+cover_image = "00_cover_v1"
+how_to_play = """
+In this book, thou art the hero.
+
+At the close of each passage thou shalt be offered a choice. Choose but one, and turn to the passage whose number is shown.
+
+Shouldst thou choose amiss, thine adventure may come to an untimely end. Fear not: take heart, and thou mayest return to the place where thou didst stray.
+
+Now let thine adventure begin. Thy journey starteth in a small village among the hills.
+"""
+
+[[paragraph]]
+number = 1
+key = "01c_village_request"
+kind = "choice"
+image = "01c_village_request_v1"
+text = """
+Thou art a traveller far from home, and at the going down of the sun thou comest unto a small village among the hills. In the square the villagers are gathered with troubled countenances, whispering one unto another.
+
+Espying thee, a stranger, the elder of the village, white of beard, cometh forth upon his staff and boweth low before thee.
+
+"Good traveller, a black dragon hath made his dwelling in a cave upon the northern mountain, and nightly he carrieth off our beasts. Already are our sheep and kine but half what they were. If this continue, we shall not outlast the winter."
+
+Behind him a mother clutcheth her babe to her breast. From the far peak a thin thread of smoke riseth into the reddened sky.
+
+At thy side hangeth but one sword, rusted and notched, and thou art no great swordsman. Yet the villagers look upon thee with beseeching eyes.
+"""
+choices = [
+  { label = "If thou wilt take up their cause", to = 7 },
+  { label = "If thou wouldst courteously decline", to = 12 },
+]
+
+[[paragraph]]
+number = 7
+key = "01r_village_map"
+kind = "result"
+image = "01r_village_map_v1"
+text = """
+"Thou wilt go? Heaven be praised!"
+
+The elder's face brighteneth, and he leadeth thee unto his cottage. By the hearth he taketh down an old roll of parchment and spreadeth it before thee. Thereon are drawn a deep forest, steep mountains, and a cave that gapeth in the mountainside.
+
+"The shortest road to the Dragon's Labyrinth lieth through this forest. 'Tis said that in its depths there is a place where the sword of a hero sleepeth. Mark thee, 'tis a tale from my grandsire's grandsire's day."
+
+Without the window, the village children press their noses to the pane, peering in at thee.
+
+Thou takest the map and grippest the hilt of thy rusted sword. At break of day, thou settest forth.
+"""
+choices = [
+  { label = "To press on into the forest", to = 4 },
+]
+
+[[paragraph]]
+number = 12
+key = "01b_village_turnip"
+kind = "bad"
+image = "01b_village_turnip_v1"
+back = 1
+text = """
+"So be it," saith the elder, and his shoulders droop. The villagers return unto their houses in silence.
+
+Having naught better to do, thou tarriest in the village, takest an empty cottage, and fallest to tilling the soil. In spring thou sowest, in summer thou weedest, in autumn thou reapest. Thirty years thus pass, and thou becomest known as the finest grower of turnips in all the village. Thy turnips are great, and white, and wondrous sweet.
+
+One day a cart cometh unto thy field, laden with gold and jewels beyond counting. A young knight in shining armour puffeth out his chest and declareth:
+
+"I have slain the dragon of the north! Hearing that this village was in distress, I have come from afar."
+
+Without a word thou stoopest, pullest up the greatest turnip of the year, and presentest it unto him with both hands, most solemnly.
+
+The knight looketh sorely perplexed.
+"""
+
+[[paragraph]]
+number = 4
+key = "02c_forest_sword"
+kind = "choice"
+image = "02c_forest_sword_v2"
+text = """
+The deeper thou goest into the forest, the darker and stiller it groweth. Twisted roots bar the path, and a white mist creepeth about thy feet. Even the birds have fallen silent.
+
+At length the trees part, and thou comest upon a small clearing. In the midst thereof standeth a great stone, clad in moss.
+
+Thrust deep into the stone is a sword. Its guard is cross-shaped, its pommel round. Old it must be, yet not a speck of rust is upon its blade.
+
+A single shaft of light falleth through the boughs and shineth upon the sword alone, as though it had waited for thee. Surely this is the place whereof the elder spake.
+
+Thou lookest down at the sword at thy side: rusted, notched, and little to be trusted. With such a blade thou canst hardly hope to face a dragon.
+"""
+choices = [
+  { label = "If thou wouldst leave it be and hasten on", to = 14 },
+  { label = "If thou wilt draw the sword", to = 10 },
+]
+
+[[paragraph]]
+number = 10
+key = "02r_forest_excalibur"
+kind = "result"
+image = "02r_forest_excalibur_v1"
+text = """
+Thou settest thy foot upon the stone and graspest the hilt with both hands.
+
+There was no need of strength. As though it had long awaited thy hand, the sword slideth from the stone.
+
+In that instant the blade blazeth with a dazzling light, and every bird in the forest taketh wing at once. For a while the light filleth the clearing, then sinketh quietly back into the steel. The sword in thy hand is light as a feather.
+
+Thou hast gained the holy sword Excalibur!
+
+Thy rusted sword thou layest gently upon the stone. It hath been thy companion all this way; thou givest it a soft word of thanks, and slingest the new blade upon thy back. A strange strength welleth up within thee.
+
+By the map, the Dragon's Labyrinth is near at hand.
+"""
+choices = [
+  { label = "To make for the Labyrinth", to = 9 },
+]
+
+[[paragraph]]
+number = 14
+key = "02b_forest_porter"
+kind = "bad"
+image = "02b_forest_porter_v1"
+back = 4
+text = """
+Thou passest the clearing with but a sidelong glance at the sword. Should it not come free, thou wouldst look a fool; and besides, thy journey brooketh no delay.
+
+Soon after, a village child, come to gather nuts, idly layeth hold upon the sword in the stone. It slideth free, and a dazzling light poureth down from heaven.
+
+Thus was born a hero of eight years.
+
+Every hero hath need of a porter. A bedroll, a pot, a change of clothes, sweetmeats, a picture book, and a pet songbird in its cage: all these thou bearest upon thy back, and thou followest the little hero whithersoever they go. The hero walketh fast, and turneth aside often.
+
+The hero slew the dragon right valiantly, and the deed was made into a ballad sung throughout the realm. The ballad hath seven verses, and the hero's name is in every one. The porter's name is in none.
+"""
+
+[[paragraph]]
+number = 9
+key = "03c_dungeon_entrance"
+kind = "choice"
+image = "03c_dungeon_entrance_v1"
+text = """
+Upon the mountainside towereth a mighty door. Two dragons' heads are carved thereon, and from their jaws hang heavy rings of iron. This is the gate of the Dragon's Labyrinth.
+
+Before the door the earth is scorched black, and white bones lie strewn about. Are these the remains of those who came calling by the front way? The scorching is fresh, and a faint smell of smoke lingereth still.
+
+Then thou espiest, in the shadow of a rock beside the door, a small hole half hidden by ivy, scarce large enough for one to crawl through.
+
+Kneeling, thou puttest thy face near, and feelest a cool breath of air flowing out from within. It seemeth to lead far into the depths. And from beyond the great door there cometh, now and again, a low rumbling, like unto snoring.
+"""
+choices = [
+  { label = "If thou wilt knock upon the great door", to = 13 },
+  { label = "If thou wouldst creep into the little hole", to = 2 },
+]
+
+[[paragraph]]
+number = 2
+key = "03r_dungeon_passage"
+kind = "result"
+image = "03r_dungeon_passage_v1"
+text = """
+Thou stoopest low, partest the ivy, and creepest into the hole. It smelleth of earth and moss.
+
+After crawling a while, the roof of a sudden riseth high. Thou kindlest thy torch, and ancient carvings appear upon the rock: men with swords upraised, doing battle with a dragon. Others, it seemeth, came this way of old to try their fortune.
+
+At thy feet, stone steps lead down into the dark. A few mice scurry past thee and run on ahead, as though they knew well whither they go. Surely this way leadeth into the heart of the Labyrinth.
+
+'Twas wisdom indeed to shun the great door. By this road thou mayest come deep within, unmarked by the dragon.
+
+Far below upon the stair, a dim and warm light glimmereth.
+"""
+choices = [
+  { label = "To descend the stair", to = 6 },
+]
+
+[[paragraph]]
+number = 13
+key = "03b_dungeon_knock"
+kind = "bad"
+image = "03b_dungeon_knock_v1"
+back = 9
+text = """
+Thou standest before the great door, takest hold of an iron ring, and knockest thrice. Boom, boom, boom. The sound echoeth about the mountain.
+
+After a while the door creaketh open, but a crack. Through the gap there thrusteth forth a dragon's head, great as a house.
+
+With eyes half closed the dragon looketh thee over from crown to heel, and from one nostril breatheth a wisp of smoke.
+
+"We want none."
+
+The door shutteth.
+
+Thou lookest again upon the door. A sign hangeth there: DRAGON AT HOME. CALLERS PRAY KNOCK. NO PEDLARS.
+
+It seemeth thou wert taken for a pedlar. Knock as thou wilt, the door shall open no more. On the third day, a second sign appeareth: KNOCK BUT ONCE.
+"""
+
+[[paragraph]]
+number = 6
+key = "04c_cellar_chest"
+kind = "choice"
+image = "04c_cellar_chest_v1"
+text = """
+At the foot of the stair thou comest into a cellar of stone. A single candle upon the floor casteth a wavering light about the room. Who lit it, none can say.
+
+In the midst of the room standeth a goodly chest, bound with bands of iron. Before it a few gold coins lie scattered, as if to entice the unwary.
+
+Thou drawest near, and then thou stayest thy step. In the narrow gap beneath the lid, something white did gleam, methought, like unto a fang. Thou hearkenest, and from within there cometh a sense of breath held still. And now thou markest it, the coins are laid out somewhat too artfully.
+
+At the far end of the room is a dark archway, whence floweth a warm wind and the glow of distant fire. The dragon's lair must lie beyond.
+"""
+choices = [
+  { label = "If thou wilt open the chest", to = 3 },
+  { label = "If thou wouldst pay it no heed and go on", to = 11 },
+]
+
+[[paragraph]]
+number = 11
+key = "04r_cellar_onward"
+kind = "result"
+image = "04r_cellar_onward_v1"
+text = """
+Thou turnest thy back upon the chest and passest beneath the arch.
+
+Behind thee the lid creaketh faintly. Thou needest not look back to know it: that was no common chest. Its clammy gaze clingeth to thy back long after.
+
+The passage windeth ever downward. The air groweth hot, and the stench of brimstone thicker. From the roof the stalactites hang like fangs, and now and again a scalding drop falleth.
+
+At length the way ahead beginneth to glow red. Thou hearest a heavy, low breathing, like the rumbling of the earth, and at every breath the pebbles at thy feet do tremble. Holding thy breath, thou goest on with silent tread.
+
+The dragon's lair is before thee. Softly thou layest thy hand upon the hilt of the holy sword at thy back.
+"""
+choices = [
+  { label = "To enter the dragon's lair", to = 15 },
+]
+
+[[paragraph]]
+number = 3
+key = "04b_cellar_mimic"
+kind = "bad"
+image = "04b_cellar_mimic_v1"
+back = 6
+text = """
+Thou layest hold upon the lid and flingest it open.
+
+No treasure lieth within. There are fangs, row upon row, a long tongue lolling, and two great eyes gazing up at thee from the dark. The chest is alive!
+
+Thou raisest thy sword. Yet the creature doth not spring. Instead, great tears come welling from its eyes and roll down its sides.
+
+"None hath opened me... these hundred years..."
+
+And so the chest beginneth to tell the tale of its hundred years: how dull were the first ten, and what quarrels it had with the mice in the ten after. Thou sittest upon the floor, nodding as it speaketh. The candle burneth down; thou kindlest another, and that too burneth down.
+
+The tale hath but now come unto the thirtieth year.
+"""
+
+[[paragraph]]
+number = 15
+key = "05c_lair_dragon"
+kind = "choice"
+image = "05c_lair_dragon_v1"
+text = """
+It is a cavern of wondrous size. The floor is heaped high with gold, and goblets and jewels glitter in the firelight. Amongst them thou seest the bells of the sheep stolen from the village.
+
+Upon the mountain of treasure, the black dragon slowly raiseth itself. Its outspread wings reach from wall to wall, and in its open throat the fire doth swirl.
+
+"Well hast thou come thus far, little one. But here thy journey endeth."
+
+The dragon's voice shaketh the cavern, and sand trickleth down from the roof. Thy knees threaten to fail thee.
+
+In that moment the holy sword upon thy back groweth faintly warm, as though it would say: Draw me. Thou art no longer a wanderer with naught but a rusted blade.
+"""
+choices = [
+  { label = "If thou wouldst flee with all speed", to = 5 },
+  { label = "If thou wilt draw the holy sword and stand thy ground", to = 8 },
+]
+
+[[paragraph]]
+number = 8
+key = "05r_lair_treasure"
+kind = "ending"
+image = "05r_lair_treasure_v1"
+text = """
+Thou drawest forth the holy sword and runnest at the dragon.
+
+The fire that the dragon breatheth is cloven in twain the moment it toucheth the light of the blade, and the hot wind grazeth thy cheek. Up the mountain of treasure thou climbest, and with all thy might thou bringest down the sword.
+
+A long, long roar echoeth through the cavern, and then all is still. The dragon's vast body slowly crumbleth, and gold pours rattling down the heap.
+
+Some days hence, the village square is decked with flowers and banners. When the cart arriveth, piled high with treasure, the villagers cry out for joy and the children run after it. Upon the cart lieth also the dragon's great horn. The elder raiseth both his hands to heaven and thanketh thee again and again.
+
+Thus didst thou become the hero who saved the village, and the tale of thy journey shall long be told therein.
+"""
+
+[[paragraph]]
+number = 5
+key = "05b_lair_tavern"
+kind = "bad"
+image = "05b_lair_tavern_v1"
+back = 15
+text = """
+Thou turnest about and runnest back the way thou camest with all thy might. Behind thee roareth the fire, but not once dost thou look back.
+
+Returned unto the village, thou tellest thy tale in the tavern: how huge was the dragon, how terrible, and how valiantly thou didst fight.
+
+From that night forth, thou standest every evening upon a bench in the tavern and tellest the selfsame tale. Each night it groweth a little greater, until the dragon is as big as a mountain and hath three heads, and thou didst battle it three days and three nights.
+
+None setteth down their cards. The tapster polisheth his tankards still. Beneath the table a hound yawneth wide.
+
+From the northern mountain a thin thread of smoke riseth yet. Of all who hear thy tale, not one believeth it.
+"""
