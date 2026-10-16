@@ -78,6 +78,15 @@ def story_ja(name, author):
 # text は空行で段落を分ける。数字は漢数字で書く。
 
 [book]
+# 企画（1 冊ごとに決めるのはこの 3 つだけ。記録用で、書き出しには使わない）
+antagonist = ""  # 立ちはだかるもの。倒さなくても、説得や謎解きなどで解決すればよい
+setting = ""  # 舞台
+key_item_before = ""  # 鍵になる持ち物（変わる前）。prompts.md の [Item: before]
+key_item_after = ""  # 鍵になる持ち物（変わった後）。prompts.md の [Item: after]
+# 条件（自由記述。例「子ども向けに、怖い場面は控えめに」「バッドエンドは全部食べ物ネタで」）
+notes = """
+"""
+
 # 書き出すファイルと公開 URL の名前（英数字）。日本語版は dist/<slug_ja>.*、英語版は dist/<slug_en>.*
 slug_ja = "{name}"
 slug_en = ""
