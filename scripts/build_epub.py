@@ -84,8 +84,10 @@ def xhtml(lang, title, body, body_class=""):
 
 
 class Book:
-    def __init__(self, edition, lang, rtl, title, author, css):
+    def __init__(self, edition, lang, rtl, title, author, css, author_alt, author_file_as):
         self.edition, self.lang, self.rtl, self.title, self.author, self.css = edition, lang, rtl, title, author, css
+        self.author_alt = author_alt          # (言語, 別の表記)。もう一方の言語での著者名
+        self.author_file_as = author_file_as  # 並べ替え用の読み
         self.docs = []      # (id, href, content, properties)
         self.media = []     # (id, href, media_type, bytes, properties)
 
@@ -118,10 +120,13 @@ class Book:
 <package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid" xml:lang="{self.lang}">
   <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
     <dc:identifier id="bookid">{book_id}</dc:identifier>
-    <dc:title>{html.escape(self.title)}</dc:title>
-    <dc:creator>{html.escape(self.author)}</dc:creator>
+    <dc:title>{html.escape(self.title, quote=False)}</dc:title>
+    <dc:creator id="creator">{html.escape(self.author, quote=False)}</dc:creator>
+    <meta refines="#creator" property="role" scheme="marc:relators">aut</meta>
+    <meta refines="#creator" property="file-as">{html.escape(self.author_file_as, quote=False)}</meta>
+    <meta refines="#creator" property="alternate-script" xml:lang="{self.author_alt[0]}">{html.escape(self.author_alt[1], quote=False)}</meta>
     <dc:language>{self.lang}</dc:language>
-    <dc:rights>© 2026 {html.escape(self.author)}</dc:rights>
+    <dc:rights>© 2026 {html.escape(self.author, quote=False)}</dc:rights>
     <meta property="dcterms:modified">{modified}</meta>
     <meta property="rendition:layout">reflowable</meta>
     <meta name="cover" content="cover-image"/>{kindle_vertical}
@@ -132,6 +137,10 @@ class Book:
   <spine{direction}>
     {spine}
   </spine>
+  <guide>
+    <reference type="cover" title="Cover" href="cover.xhtml"/>
+    <reference type="text" title="Start" href="{start_href}"/>
+  </guide>
 </package>
 """
         toc = "\n".join(f'<li><a href="{href}">{html.escape(label)}</a></li>' for label, href in nav_items)
@@ -181,7 +190,7 @@ def ja_link(label, href, number=None):
 def build_ja():
     story = tomllib.loads(STORY.read_text(encoding="utf-8"))
     b = story["book"]
-    book = Book("ryu-no-meikyu", "ja", True, b["title"], b["author"], CSS_JA)
+    book = Book("ryu-no-meikyu", "ja", True, b["title"], b["author"], CSS_JA, ("en", "Shin Okuyama"), "オクヤマ シン")
 
     book.media.append(("cover-image", "images/cover.jpg", "image/jpeg", cover_image("ryu-no-meikyu"), "cover-image"))
     book.doc("cover", '<div class="illust"><img src="images/cover.jpg" alt="表紙"/></div>', "image-page")
@@ -280,8 +289,9 @@ def build_en():
         f'@font-face {{ font-family: "{fam}"; font-style: {style}; src: url("fonts/{file}"); }}'
         for fam, file, style in EN_FONT_FILES
     )
-    full_title = f"{b['title_main']} {b['title_sub']}"
-    book = Book("dragons-labyrinth", "en", False, full_title, b["author"], faces + CSS_EN)
+    # アポストロフィは文字参照にせず、組版用の ’ を直接書く（Kindle は &#39; のまま表示してしまうため）
+    full_title = curly(f"{b['title_main']} {b['title_sub']}")
+    book = Book("dragons-labyrinth", "en", False, full_title, b["author"], faces + CSS_EN, ("ja", "奥山晋"), "Okuyama, Shin")
     for i, (_, file, _) in enumerate(EN_FONT_FILES):
         book.media.append((f"font{i}", f"fonts/{file}", "font/ttf", (FONT_DIR / file).read_bytes(), ""))
 

@@ -21,9 +21,26 @@ for f in dist/ryu-no-meikyu.html dist/ryu-no-meikyu.pdf dist/ryu-no-meikyu.epub 
   [ -f "$f" ] || { echo "見つかりません: $f（先にビルドしてください）" >&2; exit 1; }
 done
 
-put() { # put <ローカルのファイル> <S3 のキー> <Content-Type> <Cache-Control>
-  aws s3 cp "$1" "s3://$BUCKET/$2" --content-type "$3" --cache-control "$4" --only-show-errors
+put() { # put <ローカルのファイル> <S3 のキー> <Content-Type> <Cache-Control> [Content-Disposition]
+  if [ $# -ge 5 ]; then
+    aws s3 cp "$1" "s3://$BUCKET/$2" --content-type "$3" --cache-control "$4" --content-disposition "$5" --only-show-errors
+  else
+    aws s3 cp "$1" "s3://$BUCKET/$2" --content-type "$3" --cache-control "$4" --only-show-errors
+  fi
   echo "  $2"
+}
+
+# ダウンロードしたときのファイル名を本のタイトルにする（Send to Kindle などはファイル名をタイトルに使うことがある）。
+# URL は英数字のまま。disposition <inline|attachment> <英数字の名前> <タイトルの名前>
+disposition() {
+  python3 -c "import sys, urllib.parse; print(f\"{sys.argv[1]}; filename=\\\"{sys.argv[2]}\\\"; filename*=UTF-8''{urllib.parse.quote(sys.argv[3])}\")" "$1" "$2" "$3"
+}
+
+title_of() {
+  case "$1" in
+    ryu-no-meikyu) echo "竜の迷宮と錆びた剣" ;;
+    dragons-labyrinth) echo "The Dragon’s Labyrinth and the Rusted Sword" ;;
+  esac
 }
 
 echo "アップロード:"
@@ -31,8 +48,11 @@ put site/index.html index.html "text/html; charset=utf-8" "public, max-age=300"
 put build/images/00_cover_v1.webp assets/cover.webp "image/webp" "public, max-age=86400"
 for name in ryu-no-meikyu dragons-labyrinth; do
   put "dist/$name.html" "library/$name.html" "text/html; charset=utf-8" "public, max-age=300"
-  put "dist/$name.pdf" "library/$name.pdf" "application/pdf" "public, max-age=3600"
-  put "dist/$name.epub" "library/$name.epub" "application/epub+zip" "public, max-age=3600"
+  title=$(title_of "$name")
+  put "dist/$name.pdf" "library/$name.pdf" "application/pdf" "public, max-age=3600" \
+    "$(disposition inline "$name.pdf" "$title.pdf")"
+  put "dist/$name.epub" "library/$name.epub" "application/epub+zip" "public, max-age=3600" \
+    "$(disposition attachment "$name.epub" "$title.epub")"
 done
 
 echo "CloudFront のキャッシュを消去:"
