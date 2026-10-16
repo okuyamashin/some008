@@ -5,14 +5,14 @@
 1枚のプロンプトは、次のブロックを上から順につなげて作ります。
 
 ```
-[Style] + [Hero] + [Sword] + [Tone] + [Scene] + [Composition] + [Frame]
+[Style] + [Hero] + [Item] + [Tone] + [Scene] + [Composition] + [Frame]
 ```
 
 - [Style] [Hero] [Frame] は全ページ共通です。一字一句変えずに使います。
-- [Sword] と [Tone] は、場面ごとに指定された方を選びます。
+- [Item] と [Tone] は、場面ごとに指定された方を選びます。[Item] は物語の途中で姿が変わる主人公の持ち物で、この本では剣です。
 - [Scene] と [Composition] は場面ごとに書き換えます。
 - 表紙だけはカラーなので、[Style] の代わりに [Cover Style] を使います。
-- 保存先は `images/raw/<ファイル名>_v1.png` です。候補が複数あるときは `_v2`、`_v3` と番号を増やします。
+- 保存先は `books/ryu-no-meikyu/images/raw/<ファイル名>_v1.png` です。候補が複数あるときは `_v2`、`_v3` と番号を増やします。
 
 ## 共通ブロック
 
@@ -45,19 +45,19 @@ Face hidden in the shadow of a deep hood.
 Long dark hooded cloak, simple leather armor.
 ```
 
-### [Sword]（どちらか1つ）
+### [Item]（どちらか1つ）
 
-錆びた剣は、場面2で剣を抜く前と、剣を抜かなかったバッドエンドで使います。
+before（錆びた剣）は、場面2で剣を抜く前と、剣を抜かなかったバッドエンドで使います。
 
 ```text
-[Sword: rusty]
+[Item: before]
 A dull, chipped, rusty short sword sheathed in a worn scabbard at the hip.
 ```
 
-聖剣は、場面2で剣を抜いた後と表紙で使います。
+after（聖剣）は、場面2で剣を抜いた後と表紙で使います。
 
 ```text
-[Sword: holy]
+[Item: after]
 An ornate longsword with a cross-shaped hilt and a round pommel, carried in a scabbard on the back.
 ```
 
@@ -90,28 +90,28 @@ Vertical portrait composition for a book cover, painted all the way to the edges
 
 ## 場面ごとのブロック
 
-| ファイル名 | 場面 | Sword | Tone | 状態 |
+| ファイル名 | 場面 | Item | Tone | 状態 |
 | --- | --- | --- | --- | --- |
-| 00_cover | 表紙 | holy | なし（Cover Style） | 未作成 |
-| 01c_village_request | 村：依頼を受けるか | rusty | story | 未作成 |
-| 01r_village_map | 地図をもらう | rusty | story | 未作成 |
+| 00_cover | 表紙 | after | なし（Cover Style） | 未作成 |
+| 01c_village_request | 村：依頼を受けるか | before | story | 未作成 |
+| 01r_village_map | 地図をもらう | before | story | 未作成 |
 | 01b_village_turnip | カブを差し出す | なし | bad ending | 未作成 |
-| 02c_forest_sword | 森：剣が刺さっている | rusty | story | v1・v2 作成済み |
-| 02r_forest_excalibur | 剣を抜く | holy（手に持つ） | story | 未作成 |
-| 02b_forest_porter | 子どもの荷物持ち | rusty | bad ending | 未作成 |
-| 03c_dungeon_entrance | 入口：大扉か小さな穴か | holy | story | 未作成 |
-| 03r_dungeon_passage | 隠し通路 | holy | story | 未作成 |
-| 03b_dungeon_knock | 竜にセールスと間違えられる | holy | bad ending | 未作成 |
-| 04c_cellar_chest | 地下の宝箱 | holy | story | 未作成 |
-| 04r_cellar_onward | 竜の巣へ | holy | story | 未作成 |
-| 04b_cellar_mimic | 泣くミミック | holy | bad ending | v1 作成済み |
-| 05c_lair_dragon | ドラゴンとの対決 | holy | story | 未作成 |
-| 05r_lair_treasure | 財宝を持ち帰る（エンディング） | holy | story | 未作成 |
-| 05b_lair_tavern | 酒場で誰にも信じてもらえない | holy | bad ending | 未作成 |
+| 02c_forest_sword | 森：剣が刺さっている | before | story | v1・v2 作成済み |
+| 02r_forest_excalibur | 剣を抜く | after（手に持つ） | story | 未作成 |
+| 02b_forest_porter | 子どもの荷物持ち | before | bad ending | 未作成 |
+| 03c_dungeon_entrance | 入口：大扉か小さな穴か | after | story | 未作成 |
+| 03r_dungeon_passage | 隠し通路 | after | story | 未作成 |
+| 03b_dungeon_knock | 竜にセールスと間違えられる | after | bad ending | 未作成 |
+| 04c_cellar_chest | 地下の宝箱 | after | story | 未作成 |
+| 04r_cellar_onward | 竜の巣へ | after | story | 未作成 |
+| 04b_cellar_mimic | 泣くミミック | after | bad ending | v1 作成済み |
+| 05c_lair_dragon | ドラゴンとの対決 | after | story | 未作成 |
+| 05r_lair_treasure | 財宝を持ち帰る（エンディング） | after | story | 未作成 |
+| 05b_lair_tavern | 酒場で誰にも信じてもらえない | after | bad ending | 未作成 |
 
 ### 00_cover　表紙
 
-[Cover Style] + [Hero] + [Sword: holy] + 以下 + [Cover Frame]
+[Cover Style] + [Hero] + [Item: after] + 以下 + [Cover Frame]
 
 ```text
 [Scene]
@@ -126,7 +126,7 @@ Keep the top quarter calm and dark so a title can be placed over it later.
 
 ### 01c_village_request　村：依頼を受けるか
 
-[Style] + [Hero] + [Sword: rusty] + [Tone: story] + 以下 + [Frame]
+[Style] + [Hero] + [Item: before] + [Tone: story] + 以下 + [Frame]
 
 ```text
 [Scene]
@@ -142,7 +142,7 @@ The distant mountain with the smoke is small, at the upper right.
 
 ### 01r_village_map　地図をもらう
 
-[Style] + [Hero] + [Sword: rusty] + [Tone: story] + 以下 + [Frame]
+[Style] + [Hero] + [Item: before] + [Tone: story] + 以下 + [Frame]
 
 ```text
 [Scene]
@@ -157,7 +157,7 @@ The map passing between the two hands is the visual center; the hero is at the l
 
 ### 01b_village_turnip　カブを差し出す（バッドエンド）
 
-[Style] + [Hero] + [Tone: bad ending] + 以下 + [Frame]（Sword は付けない）
+[Style] + [Hero] + [Tone: bad ending] + 以下 + [Frame]（Item は付けない）
 
 ```text
 [Scene]
@@ -172,7 +172,7 @@ The giant turnip is the visual center, held up between the old farmer and the kn
 
 ### 02c_forest_sword　森：剣が刺さっている（作成済み）
 
-[Style] + [Hero] + [Sword: rusty] + [Tone: story] + 以下 + [Frame]
+[Style] + [Hero] + [Item: before] + [Tone: story] + 以下 + [Frame]
 
 ```text
 [Scene]
@@ -188,7 +188,7 @@ The sword is the visual center; the hero stands at the lower left, about one thi
 
 ### 02r_forest_excalibur　剣を抜く
 
-[Style] + [Hero] + [Sword: holy] + [Tone: story] + 以下 + [Frame]
+[Style] + [Hero] + [Item: after] + [Tone: story] + 以下 + [Frame]
 
 ```text
 [Scene]
@@ -203,7 +203,7 @@ The raised sword is at the top center; the hero stands on the stone, seen in thr
 
 ### 02b_forest_porter　子どもの荷物持ち（バッドエンド）
 
-[Style] + [Hero] + [Sword: rusty] + [Tone: bad ending] + 以下 + [Frame]
+[Style] + [Hero] + [Item: before] + [Tone: bad ending] + 以下 + [Frame]
 
 ```text
 [Scene]
@@ -218,7 +218,7 @@ The child is at the upper center, striding forward; the hero follows at the lowe
 
 ### 03c_dungeon_entrance　入口：大扉か小さな穴か
 
-[Style] + [Hero] + [Sword: holy] + [Tone: story] + 以下 + [Frame]
+[Style] + [Hero] + [Item: after] + [Tone: story] + 以下 + [Frame]
 
 ```text
 [Scene]
@@ -233,7 +233,7 @@ The great door fills the right half; the small hole is at the lower left; the he
 
 ### 03r_dungeon_passage　隠し通路
 
-[Style] + [Hero] + [Sword: holy] + [Tone: story] + 以下 + [Frame]
+[Style] + [Hero] + [Item: after] + [Tone: story] + 以下 + [Frame]
 
 ```text
 [Scene]
@@ -247,7 +247,7 @@ The passage recedes from the foreground to the glow at the center; the hero is i
 
 ### 03b_dungeon_knock　竜にセールスと間違えられる（バッドエンド）
 
-[Style] + [Hero] + [Sword: holy] + [Tone: bad ending] + 以下 + [Frame]
+[Style] + [Hero] + [Item: after] + [Tone: bad ending] + 以下 + [Frame]
 
 ```text
 [Scene]
@@ -264,7 +264,7 @@ The dragon's head in the door gap is the visual center; the hero is at the lower
 
 ### 04c_cellar_chest　地下の宝箱
 
-[Style] + [Hero] + [Sword: holy] + [Tone: story] + 以下 + [Frame]
+[Style] + [Hero] + [Item: after] + [Tone: story] + 以下 + [Frame]
 
 ```text
 [Scene]
@@ -279,7 +279,7 @@ The chest is the visual center; the hero stands at the lower left, seen from beh
 
 ### 04r_cellar_onward　竜の巣へ
 
-[Style] + [Hero] + [Sword: holy] + [Tone: story] + 以下 + [Frame]
+[Style] + [Hero] + [Item: after] + [Tone: story] + 以下 + [Frame]
 
 ```text
 [Scene]
@@ -293,7 +293,7 @@ The glowing cavern is at the upper center; the hero walks away in the middle, se
 
 ### 04b_cellar_mimic　泣くミミック（バッドエンド・作成済み）
 
-[Style] + [Hero] + [Sword: holy] + [Tone: bad ending] + 以下 + [Frame]
+[Style] + [Hero] + [Item: after] + [Tone: bad ending] + 以下 + [Frame]
 
 ```text
 [Scene]
@@ -310,7 +310,7 @@ The weeping mimic is the visual center; the hero sits at the lower left, seen fr
 
 ### 05c_lair_dragon　ドラゴンとの対決
 
-[Style] + [Hero] + [Sword: holy] + [Tone: story] + 以下 + [Frame]
+[Style] + [Hero] + [Item: after] + [Tone: story] + 以下 + [Frame]
 
 ```text
 [Scene]
@@ -324,7 +324,7 @@ The dragon towers over the upper two thirds; the hero is small at the bottom cen
 
 ### 05r_lair_treasure　財宝を持ち帰る（エンディング）
 
-[Style] + [Hero] + [Sword: holy] + [Tone: story] + 以下 + [Frame]
+[Style] + [Hero] + [Item: after] + [Tone: story] + 以下 + [Frame]
 
 ```text
 [Scene]
@@ -339,7 +339,7 @@ The cart of treasure and the cheering crowd fill the center; the hero is at the 
 
 ### 05b_lair_tavern　酒場で誰にも信じてもらえない（バッドエンド）
 
-[Style] + [Hero] + [Sword: holy] + [Tone: bad ending] + 以下 + [Frame]
+[Style] + [Hero] + [Item: after] + [Tone: bad ending] + 以下 + [Frame]
 
 ```text
 [Scene]

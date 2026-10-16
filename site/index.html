@@ -1,14 +1,18 @@
 <!doctype html>
+<!--
+  入口ページの型。scripts/build_index.py が books/*/story.toml から dist/index.html を書き出す。
+  「本ごとに繰り返す」から「ここまで」は、本 1 冊ごとに繰り返す。${...} は書き出すときに埋める。
+-->
 <html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>竜の迷宮と錆びた剣 — ゲームブック</title>
+<title>${page_title}</title>
 <meta name="description" content="君が主人公になるアドベンチャーゲームブック。日本語版と英語版を、ブラウザかPDFで。">
 <meta name="author" content="奥山晋">
-<meta property="og:title" content="竜の迷宮と錆びた剣">
+<meta property="og:title" content="${og_title}">
 <meta property="og:description" content="君が主人公になるアドベンチャーゲームブック">
-<meta property="og:image" content="https://gamebook.engawa5656.com/assets/cover.webp">
+<meta property="og:image" content="https://gamebook.engawa5656.com/${og_cover}">
 <style>
 :root {
   --paper: #f3ecda;
@@ -29,6 +33,7 @@ body {
 }
 main { max-width: 920px; margin: 0 auto; padding: 48px 20px 32px; }
 header { text-align: center; margin-bottom: 40px; }
+.shelf + header { margin-top: 64px; }
 .eyebrow { margin: 0; font-size: 13px; letter-spacing: 0.3em; color: var(--soft); }
 h1 { margin: 10px 0 4px; font-size: clamp(28px, 6vw, 44px); letter-spacing: 0.12em; font-weight: 700; }
 .en-title { margin: 0; font-size: clamp(14px, 2.6vw, 18px); font-style: italic; color: var(--soft); letter-spacing: 0.02em; }
@@ -49,7 +54,7 @@ h1 { margin: 10px 0 4px; font-size: clamp(28px, 6vw, 44px); letter-spacing: 0.12
   position: relative;
   display: block;
   aspect-ratio: 105 / 148;
-  background: #222 center / cover no-repeat url("assets/cover.webp");
+  background: #222 center / cover no-repeat;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
   border-radius: 2px;
 }
@@ -96,40 +101,42 @@ footer { margin-top: 48px; text-align: center; font-size: 12px; color: var(--sof
 </head>
 <body>
 <main>
+  <!-- 本ごとに繰り返す -->
   <header>
     <p class="eyebrow">アドベンチャーゲームブック</p>
-    <h1>竜の迷宮と錆びた剣</h1>
-    <p class="en-title">The Dragon’s Labyrinth and the Rusted Sword</p>
-    <p class="lead">君が主人公になって、竜退治に挑む短い冒険です。場面ごとに道を選び、番号の場面へ進んでください。道を誤ると……どうなるかは、読んでのお楽しみ。</p>
+    <h1>${title}</h1>
+    <p class="en-title">${title_en}</p>
+    <p class="lead">${lead}</p>
   </header>
 
   <section class="shelf" aria-label="版">
     <article class="book">
-      <a class="cover ja" href="library/ryu-no-meikyu.html" aria-label="日本語版をブラウザで読む"><span>竜の迷宮と錆びた剣</span></a>
+      <a class="cover ja" href="library/${slug_ja}.html" style="background-image: url(${cover})" aria-label="日本語版をブラウザで読む"><span>${title}</span></a>
       <div>
         <h2>日本語版</h2>
         <p class="note">縦書きの文庫見開き。スマホでも読めます。</p>
         <div class="actions">
-          <a class="read" href="library/ryu-no-meikyu.html">ブラウザで読む</a>
-          <a class="pdf" href="library/ryu-no-meikyu.epub">電子書籍 <small>（EPUB）</small></a>
-          <a class="pdf" href="library/ryu-no-meikyu.pdf">PDF <small>（A6・右綴じ）</small></a>
+          <a class="read" href="library/${slug_ja}.html">ブラウザで読む</a>
+          <a class="pdf" href="library/${slug_ja}.epub">電子書籍 <small>（EPUB）</small></a>
+          <a class="pdf" href="library/${slug_ja}.pdf">PDF <small>（A6・右綴じ）</small></a>
         </div>
       </div>
     </article>
 
     <article class="book" lang="en">
-      <a class="cover en" href="library/dragons-labyrinth.html" aria-label="Read the English edition in your browser"><span>The Dragon’s Labyrinth</span></a>
+      <a class="cover en" href="library/${slug_en}.html" style="background-image: url(${cover})" aria-label="Read the English edition in your browser"><span>${title_en_main}</span></a>
       <div>
         <h2>English Edition</h2>
         <p class="note">In the manner of Early Modern English, wherein thou art the hero.</p>
         <div class="actions">
-          <a class="read" href="library/dragons-labyrinth.html">Read in Browser</a>
-          <a class="pdf" href="library/dragons-labyrinth.epub">E-book <small>(EPUB)</small></a>
-          <a class="pdf" href="library/dragons-labyrinth.pdf">PDF <small>(A6)</small></a>
+          <a class="read" href="library/${slug_en}.html">Read in Browser</a>
+          <a class="pdf" href="library/${slug_en}.epub">E-book <small>(EPUB)</small></a>
+          <a class="pdf" href="library/${slug_en}.pdf">PDF <small>(A6)</small></a>
         </div>
       </div>
     </article>
   </section>
+  <!-- ここまで -->
 
   <section class="howto-read" aria-label="電子書籍の読み方">
     <h2>電子書籍（EPUB）の読み方</h2>

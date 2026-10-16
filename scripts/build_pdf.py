@@ -1,9 +1,10 @@
 """PDF 版（文庫サイズ）を書き出す。日本語版は縦書き・右綴じ、英語版は横書き・左綴じ。
 
 使い方:
-    build/.venv/bin/python scripts/build_pdf.py        # 日本語版と英語版の両方
-    build/.venv/bin/python scripts/build_pdf.py ja     # dist/ryu-no-meikyu.pdf
-    build/.venv/bin/python scripts/build_pdf.py en     # dist/dragons-labyrinth.pdf
+    build/.venv/bin/python scripts/build_pdf.py                           # books/ 以下の全巻の日本語版と英語版
+    build/.venv/bin/python scripts/build_pdf.py --book ryu-no-meikyu      # 1 冊だけ
+    build/.venv/bin/python scripts/build_pdf.py --book ryu-no-meikyu ja   # dist/<slug_ja>.pdf
+    build/.venv/bin/python scripts/build_pdf.py --book ryu-no-meikyu en   # dist/<slug_en>.pdf
 
 準備（初回だけ）:
     python3 -m venv build/.venv && build/.venv/bin/pip install pypdf
@@ -22,28 +23,28 @@ import base64
 import html
 import subprocess
 import sys
-import tomllib
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_html import CACHE_DIR, RAW_DIR, ROOT, STORY, STORY_EN, curly, en_choice, en_paragraphs, font_faces, paragraphs, tcy  # noqa: E402
+from books import ROOT, parse_args  # noqa: E402
+from build_html import curly, en_choice, en_paragraphs, font_faces, paragraphs, tcy  # noqa: E402
 
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 GRAY_PROFILE = "/System/Library/ColorSync/Profiles/Generic Gray Gamma 2.2 Profile.icc"
 
 
-def jpeg_data_uri(name, gray):
+def jpeg_data_uri(src, name, gray):
     """PDF 用の画像。Chrome は JPEG ならそのまま PDF に入れるが、WebP は無圧縮に近い形に変えてしまうため。"""
-    src = RAW_DIR / f"{name}.png"
-    if not src.exists():
-        sys.exit(f"画像がありません: {src.relative_to(ROOT)}")
-    dst = CACHE_DIR / f"{name}{'.gray' if gray else ''}.jpg"
-    if not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime:
-        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    png = src.raw_dir / f"{name}.png"
+    if not png.exists():
+        sys.exit(f"画像がありません: {png.relative_to(ROOT)}")
+    dst = src.cache_dir / f"{name}{'.gray' if gray else ''}.jpg"
+    if not dst.exists() or dst.stat().st_mtime < png.stat().st_mtime:
+        src.cache_dir.mkdir(parents=True, exist_ok=True)
         cmd = ["sips", "-s", "format", "jpeg", "-s", "formatOptions", "65" if gray else "75", "--resampleWidth", "1000"]
         if gray:
             cmd += ["-m", GRAY_PROFILE]
-        subprocess.run(cmd + [str(src), "--out", str(dst)], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(cmd + [str(png), "--out", str(dst)], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     return "data:image/jpeg;base64," + base64.b64encode(dst.read_bytes()).decode()
 
 
@@ -71,17 +72,17 @@ def text_page(p):
 </div>"""
 
 
-def image_page(p):
+def image_page(src, p):
     return f"""
-<div class="pg illust"><img src="{jpeg_data_uri(p["image"], gray=True)}" alt=""></div>"""
+<div class="pg illust"><img src="{jpeg_data_uri(src, p["image"], gray=True)}" alt=""></div>"""
 
 
-def build_ja():
-    story = tomllib.loads(STORY.read_text(encoding="utf-8"))
+def build_ja(src):
+    story = src.story("ja")
     book = story["book"]
     title, subtitle, author, year = (html.escape(book[k]) for k in ("title", "subtitle", "author", "year"))
-    cover = jpeg_data_uri(book["cover_image"], gray=False)
-    pages = "".join(text_page(p) + image_page(p) for p in sorted(story["paragraph"], key=lambda p: p["number"]))
+    cover = jpeg_data_uri(src, book["cover_image"], gray=False)
+    pages = "".join(text_page(p) + image_page(src, p) for p in sorted(story["paragraph"], key=lambda p: p["number"]))
     page = f"""<!doctype html>
 <html lang="ja">
 <head>
@@ -111,7 +112,7 @@ def build_ja():
 </body>
 </html>
 """
-    make_pdf("ryu-no-meikyu", page, book["title"], book["author"], book["subtitle"], rtl=True)
+    make_pdf(src.slug("ja"), page, book["title"], book["author"], book["subtitle"], rtl=True)
 
 
 def make_pdf(name, page, title, author, subject, rtl):
@@ -172,12 +173,12 @@ def en_text_page(p):
 </div>"""
 
 
-def build_en():
-    story = tomllib.loads(STORY_EN.read_text(encoding="utf-8"))
+def build_en(src):
+    story = src.story("en")
     raw = story["book"]
     book = {k: curly(html.escape(v, quote=False)) if isinstance(v, str) else v for k, v in raw.items()}
-    cover = jpeg_data_uri(raw["cover_image"], gray=False)
-    pages = "".join(en_text_page(p) + image_page(p) for p in sorted(story["paragraph"], key=lambda p: p["number"]))
+    cover = jpeg_data_uri(src, raw["cover_image"], gray=False)
+    pages = "".join(en_text_page(p) + image_page(src, p) for p in sorted(story["paragraph"], key=lambda p: p["number"]))
     page = f"""<!doctype html>
 <html lang="en">
 <head>
@@ -210,7 +211,7 @@ def build_en():
 </body>
 </html>
 """
-    make_pdf("dragons-labyrinth", page, f"{raw['title_main']} {raw['title_sub']}", raw["author"], raw["subtitle"], rtl=False)
+    make_pdf(src.slug("en"), page, f"{raw['title_main']} {raw['title_sub']}", raw["author"], raw["subtitle"], rtl=False)
 
 
 PRINT_CSS = """
@@ -367,5 +368,7 @@ a { color: #96241a; text-decoration: none; }
 
 
 if __name__ == "__main__":
-    for target in sys.argv[1:] or ["ja", "en"]:
-        {"ja": build_ja, "en": build_en}[target]()
+    args = parse_args("PDF 版を書き出す")
+    for src in args.books:
+        for lang in args.langs:
+            {"ja": build_ja, "en": build_en}[lang](src)

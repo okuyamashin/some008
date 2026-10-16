@@ -1,10 +1,11 @@
 """EPUB 版を書き出す。日本語版は縦書き・右綴じ、英語版は横書き・左綴じ。
 
 使い方:
-    build/.venv/bin/python scripts/build_pdf.py     # 先に（表紙画像を PDF 用の印刷ページから作るため）
-    python3 scripts/build_epub.py                   # 日本語版と英語版の両方
-    python3 scripts/build_epub.py ja                # dist/ryu-no-meikyu.epub
-    python3 scripts/build_epub.py en                # dist/dragons-labyrinth.epub
+    build/.venv/bin/python scripts/build_pdf.py              # 先に（表紙画像を PDF 用の印刷ページから作るため）
+    python3 scripts/build_epub.py                            # books/ 以下の全巻の日本語版と英語版
+    python3 scripts/build_epub.py --book ryu-no-meikyu       # 1 冊だけ
+    python3 scripts/build_epub.py --book ryu-no-meikyu ja    # dist/<slug_ja>.epub
+    python3 scripts/build_epub.py --book ryu-no-meikyu en    # dist/<slug_en>.epub
 
 本の中身:
     表紙 → 扉 → 遊び方 → パラグラフ 1〜15。各パラグラフは「挿絵のページ → 本文のページ」。
@@ -16,45 +17,45 @@ Kindle で読むときは、EPUB を「Send to Kindle」で送る（Kindle 側�
 import html
 import subprocess
 import sys
-import tomllib
 import uuid
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_html import CACHE_DIR, FONT_DIR, RAW_DIR, ROOT, STORY, STORY_EN, curly, en_paragraphs, paragraphs  # noqa: E402
+from books import ROOT, parse_args  # noqa: E402
+from build_html import FONT_DIR, curly, en_paragraphs, paragraphs  # noqa: E402
 
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 GRAY_PROFILE = "/System/Library/ColorSync/Profiles/Generic Gray Gamma 2.2 Profile.icc"
 IMAGE_WIDTH = 900
 
 
-def illustration(name):
+def illustration(src, name):
     """挿絵をグレースケールの JPEG にする（電子書籍リーダーはどれも JPEG を表示できる）。"""
-    src = RAW_DIR / f"{name}.png"
-    if not src.exists():
-        sys.exit(f"画像がありません: {src.relative_to(ROOT)}")
-    dst = CACHE_DIR / f"{name}.epub.jpg"
-    if not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime:
-        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    png = src.raw_dir / f"{name}.png"
+    if not png.exists():
+        sys.exit(f"画像がありません: {png.relative_to(ROOT)}")
+    dst = src.cache_dir / f"{name}.epub.jpg"
+    if not dst.exists() or dst.stat().st_mtime < png.stat().st_mtime:
+        src.cache_dir.mkdir(parents=True, exist_ok=True)
         subprocess.run(
             ["sips", "-s", "format", "jpeg", "-s", "formatOptions", "70", "--resampleWidth", str(IMAGE_WIDTH),
-             "-m", GRAY_PROFILE, str(src), "--out", str(dst)],
+             "-m", GRAY_PROFILE, str(png), "--out", str(dst)],
             check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
         )
     return dst.read_bytes()
 
 
-def cover_image(edition):
+def cover_image(src, edition):
     """タイトル入りの表紙。PDF 用の印刷ページの 1 ページ目（表紙）を Chrome で撮影して JPEG にする。"""
     print_html = ROOT / "dist" / f"{edition}.print.html"
     if not print_html.exists():
         sys.exit(f"{print_html.relative_to(ROOT)} がありません。先に build/.venv/bin/python scripts/build_pdf.py を実行してください")
-    png = CACHE_DIR / f"{edition}.cover.png"
-    jpg = CACHE_DIR / f"{edition}.cover.jpg"
+    png = src.cache_dir / f"{edition}.cover.png"
+    jpg = src.cache_dir / f"{edition}.cover.jpg"
     if not jpg.exists() or jpg.stat().st_mtime < print_html.stat().st_mtime:
-        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        src.cache_dir.mkdir(parents=True, exist_ok=True)
         # A6 の 105mm × 148mm は CSS で約 397 × 559 px。2.6 倍で撮って約 1030 × 1450 px にする
         subprocess.run(
             [CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--window-size=397,559",
@@ -84,10 +85,11 @@ def xhtml(lang, title, body, body_class=""):
 
 
 class Book:
-    def __init__(self, edition, lang, rtl, title, author, css, author_alt, author_file_as):
+    def __init__(self, edition, lang, rtl, title, author, css, author_alt, author_file_as, year):
         self.edition, self.lang, self.rtl, self.title, self.author, self.css = edition, lang, rtl, title, author, css
         self.author_alt = author_alt          # (言語, 別の表記)。もう一方の言語での著者名
         self.author_file_as = author_file_as  # 並べ替え用の読み
+        self.year = year                      # 著作権表示の年（算用数字）
         self.docs = []      # (id, href, content, properties)
         self.media = []     # (id, href, media_type, bytes, properties)
 
@@ -126,7 +128,7 @@ class Book:
     <meta refines="#creator" property="file-as">{html.escape(self.author_file_as, quote=False)}</meta>
     <meta refines="#creator" property="alternate-script" xml:lang="{self.author_alt[0]}">{html.escape(self.author_alt[1], quote=False)}</meta>
     <dc:language>{self.lang}</dc:language>
-    <dc:rights>© 2026 {html.escape(self.author, quote=False)}</dc:rights>
+    <dc:rights>© {self.year} {html.escape(self.author, quote=False)}</dc:rights>
     <meta property="dcterms:modified">{modified}</meta>
     <meta property="rendition:layout">reflowable</meta>
     <meta name="cover" content="cover-image"/>{kindle_vertical}
@@ -187,12 +189,18 @@ def ja_link(label, href, number=None):
     return f'<p class="choice"><a href="{href}">◆{html.escape(label)}</a>{to}</p>'
 
 
-def build_ja():
-    story = tomllib.loads(STORY.read_text(encoding="utf-8"))
-    b = story["book"]
-    book = Book("ryu-no-meikyu", "ja", True, b["title"], b["author"], CSS_JA, ("en", "Shin Okuyama"), "オクヤマ シン")
+def western_year(year):
+    """story.toml の年（漢数字の「二〇二六」）を算用数字にする。"""
+    return year.translate(str.maketrans("〇一二三四五六七八九", "0123456789"))
 
-    book.media.append(("cover-image", "images/cover.jpg", "image/jpeg", cover_image("ryu-no-meikyu"), "cover-image"))
+
+def build_ja(src):
+    story = src.story("ja")
+    b = story["book"]
+    book = Book(src.slug("ja"), "ja", True, b["title"], b["author"], CSS_JA, ("en", b["author_en"]), b["author_file_as"],
+                western_year(b["year"]))
+
+    book.media.append(("cover-image", "images/cover.jpg", "image/jpeg", cover_image(src, src.slug("ja")), "cover-image"))
     book.doc("cover", '<div class="illust"><img src="images/cover.jpg" alt="表紙"/></div>', "image-page")
     title, subtitle, author, year = (html.escape(b[k]) for k in ("title", "subtitle", "author", "year"))
     book.doc("title", f"""<div class="tobira">
@@ -216,7 +224,7 @@ def build_ja():
         else:
             tail = '<p class="end">——めでたし、めでたし</p>'
             links = [ja_link("最初から読む", "cover.xhtml")]
-        book.image_page(f"p{n}", f"img{n}", illustration(p["image"]))
+        book.image_page(f"p{n}", f"img{n}", illustration(src, p["image"]))
         body_class = "bad" if kind == "bad" else ""
         book.doc(f"p{n}t", f"""<h2 class="num">{ja_tcy(n)}</h2>
 {paragraphs(p["text"])}
@@ -282,8 +290,8 @@ EN_FONT_FILES = [
 ]
 
 
-def build_en():
-    story = tomllib.loads(STORY_EN.read_text(encoding="utf-8"))
+def build_en(src):
+    story = src.story("en")
     b = story["book"]
     faces = "\n".join(
         f'@font-face {{ font-family: "{fam}"; font-style: {style}; src: url("fonts/{file}"); }}'
@@ -291,11 +299,12 @@ def build_en():
     )
     # アポストロフィは文字参照にせず、組版用の ’ を直接書く（Kindle は &#39; のまま表示してしまうため）
     full_title = curly(f"{b['title_main']} {b['title_sub']}")
-    book = Book("dragons-labyrinth", "en", False, full_title, b["author"], faces + CSS_EN, ("ja", "奥山晋"), "Okuyama, Shin")
+    book = Book(src.slug("en"), "en", False, full_title, b["author"], faces + CSS_EN, ("ja", src.info["author"]),
+                src.info["author_en_file_as"], western_year(src.info["year"]))
     for i, (_, file, _) in enumerate(EN_FONT_FILES):
         book.media.append((f"font{i}", f"fonts/{file}", "font/ttf", (FONT_DIR / file).read_bytes(), ""))
 
-    book.media.append(("cover-image", "images/cover.jpg", "image/jpeg", cover_image("dragons-labyrinth"), "cover-image"))
+    book.media.append(("cover-image", "images/cover.jpg", "image/jpeg", cover_image(src, src.slug("en")), "cover-image"))
     book.doc("cover", '<div class="illust"><img src="images/cover.jpg" alt="Cover"/></div>', "image-page")
     e = {k: curly(html.escape(v, quote=False)) for k, v in b.items() if isinstance(v, str)}
     book.doc("title", f"""<div class="titlepage">
@@ -321,7 +330,7 @@ def build_en():
         else:
             tail = '<p class="end finis">Finis.</p>'
             links = [en_link("To begin anew, turn back to the cover", "cover.xhtml")]
-        book.image_page(f"p{n}", f"img{n}", illustration(p["image"]))
+        book.image_page(f"p{n}", f"img{n}", illustration(src, p["image"]))
         book.doc(f"p{n}t", f"""<p class="num">❦ {n} ❦</p>
 {en_paragraphs(p["text"])}
 {tail}
@@ -361,5 +370,7 @@ h2.howto { text-align: center; font-family: "Maguntia", serif; font-weight: norm
 
 
 if __name__ == "__main__":
-    for target in sys.argv[1:] or ["ja", "en"]:
-        {"ja": build_ja, "en": build_en}[target]()
+    args = parse_args("EPUB 版を書き出す")
+    for src in args.books:
+        for lang in args.langs:
+            {"ja": build_ja, "en": build_en}[lang](src)

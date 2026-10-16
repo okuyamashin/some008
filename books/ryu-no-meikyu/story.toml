@@ -10,11 +10,19 @@
 # text は空行で段落を分ける。数字は漢数字で書く。
 
 [book]
+# 書き出すファイルと公開 URL の名前（英数字）。日本語版は dist/<slug_ja>.*、英語版は dist/<slug_en>.*
+slug_ja = "ryu-no-meikyu"
+slug_en = "dragons-labyrinth"
 title = "竜の迷宮と錆びた剣"
 subtitle = "君が主人公になるアドベンチャーゲームブック"
 author = "奥山晋"
+author_file_as = "オクヤマ シン"      # 著者名の読み（電子書籍の並べ替え用）
+author_en = "Shin Okuyama"            # 英語での著者名（日本語版 EPUB の別言語表記）
+author_en_file_as = "Okuyama, Shin"   # 英語版での並べ替え用（英語版 EPUB の別言語表記は author）
 year = "二〇二六"
 cover_image = "00_cover_v1"
+# 入口ページ（site/index.html）の紹介文
+lead = "君が主人公になって、竜退治に挑む短い冒険です。場面ごとに道を選び、番号の場面へ進んでください。道を誤ると……どうなるかは、読んでのお楽しみ。"
 how_to_play = """
 この本では、君が主人公だ。
 

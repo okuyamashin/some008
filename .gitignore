@@ -7,7 +7,7 @@
 .DS_Store
 
 # Original generated images (keep locally only)
-images/raw/
+books/*/images/raw/
 
 # Build outputs
 build/

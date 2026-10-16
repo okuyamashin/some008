@@ -1,11 +1,12 @@
 """本文データと images/raw/ の画像から、1 ファイルで完結する HTML 版を書き出す。
 
 使い方:
-    python3 scripts/build_html.py          # 日本語版と英語版の両方
-    python3 scripts/build_html.py ja       # 日本語版だけ（story/story.toml → dist/ryu-no-meikyu.html）
-    python3 scripts/build_html.py en       # 英語版だけ（story/story.en.toml → dist/dragons-labyrinth.html）
+    python3 scripts/build_html.py                              # books/ 以下の全巻の日本語版と英語版
+    python3 scripts/build_html.py --book ryu-no-meikyu         # 1 冊だけ
+    python3 scripts/build_html.py --book ryu-no-meikyu ja      # 日本語版だけ（story.toml → dist/<slug_ja>.html）
+    python3 scripts/build_html.py --book ryu-no-meikyu en      # 英語版だけ（story.en.toml → dist/<slug_en>.html）
 
-画像は横 1000px の WebP に変換して build/images/ にキャッシュし、HTML に埋め込む。
+画像は横 1000px の WebP に変換して build/images/<名前>/ にキャッシュし、HTML に埋め込む。
 変換には cwebp（brew install webp）を使う。英語版は fonts/ のフォントも埋め込む。
 """
 
@@ -14,35 +15,32 @@ import html
 import re
 import subprocess
 import sys
-import tomllib
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-STORY = ROOT / "story" / "story.toml"
-STORY_EN = ROOT / "story" / "story.en.toml"
-RAW_DIR = ROOT / "images" / "raw"
-CACHE_DIR = ROOT / "build" / "images"
+from books import ROOT, parse_args
+
 FONT_DIR = ROOT / "fonts"
-OUT = ROOT / "dist" / "ryu-no-meikyu.html"
-OUT_EN = ROOT / "dist" / "dragons-labyrinth.html"
 
 IMAGE_WIDTH = 1000
 QUALITY_MONO = 60
 QUALITY_COVER = 75
 
 
-def webp_data_uri(name, quality):
-    src = RAW_DIR / f"{name}.png"
-    if not src.exists():
-        sys.exit(f"画像がありません: {src.relative_to(ROOT)}")
-    dst = CACHE_DIR / f"{name}.webp"
-    if not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime:
-        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+def webp_path(src, name, quality):
+    png = src.raw_dir / f"{name}.png"
+    if not png.exists():
+        sys.exit(f"画像がありません: {png.relative_to(ROOT)}")
+    dst = src.cache_dir / f"{name}.webp"
+    if not dst.exists() or dst.stat().st_mtime < png.stat().st_mtime:
+        src.cache_dir.mkdir(parents=True, exist_ok=True)
         subprocess.run(
-            ["cwebp", "-quiet", "-q", str(quality), "-resize", str(IMAGE_WIDTH), "0", str(src), "-o", str(dst)],
+            ["cwebp", "-quiet", "-q", str(quality), "-resize", str(IMAGE_WIDTH), "0", str(png), "-o", str(dst)],
             check=True,
         )
-    return "data:image/webp;base64," + base64.b64encode(dst.read_bytes()).decode()
+    return dst
+
+
+def webp_data_uri(src, name, quality):
+    return "data:image/webp;base64," + base64.b64encode(webp_path(src, name, quality).read_bytes()).decode()
 
 
 def tcy(number):
@@ -64,7 +62,7 @@ def choice_link(label, to, back=False):
     return f'<a href="#p{to}"{attr}><span class="mark">◆</span>{html.escape(label)}<span class="to">{tcy(to)}へ</span></a>'
 
 
-def spread(p):
+def spread(src, p):
     n, kind = p["number"], p["kind"]
     links = []
     tail = ""
@@ -76,7 +74,7 @@ def spread(p):
     elif kind == "ending":
         tail = '<p class="end">——めでたし、めでたし</p>'
         links = ['<a href="#cover" data-dir="back"><span class="mark">◆</span>最初から読む</a>']
-    img = webp_data_uri(p["image"], QUALITY_MONO)
+    img = webp_data_uri(src, p["image"], QUALITY_MONO)
     return f"""
 <section tabindex="-1" class="spread {kind}" id="p{n}" aria-label="パラグラフ{n}">
   <div class="page left illust"><img src="{img}" alt="" decoding="async"></div>
@@ -89,12 +87,12 @@ def spread(p):
 </section>"""
 
 
-def build_ja():
-    story = tomllib.loads(STORY.read_text(encoding="utf-8"))
+def build_ja(src):
+    story = src.story("ja")
     book = story["book"]
     title, subtitle, author, year = (html.escape(book[k]) for k in ("title", "subtitle", "author", "year"))
-    cover = webp_data_uri(book["cover_image"], QUALITY_COVER)
-    body = "\n".join(spread(p) for p in story["paragraph"])
+    cover = webp_data_uri(src, book["cover_image"], QUALITY_COVER)
+    body = "\n".join(spread(src, p) for p in story["paragraph"])
 
     page = f"""<!doctype html>
 <html lang="ja" data-binding="rtl">
@@ -136,9 +134,14 @@ def build_ja():
 </body>
 </html>
 """
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(page, encoding="utf-8")
-    print(f"{OUT.relative_to(ROOT)} ({OUT.stat().st_size / 1024 / 1024:.1f} MB)")
+    write(src.slug("ja"), page)
+
+
+def write(slug, page):
+    out = ROOT / "dist" / f"{slug}.html"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(page, encoding="utf-8")
+    print(f"{out.relative_to(ROOT)} ({out.stat().st_size / 1024 / 1024:.1f} MB)")
 
 
 CSS = """
@@ -368,7 +371,7 @@ def en_choice(label, to, back=False):
     )
 
 
-def en_spread(p):
+def en_spread(src, p):
     n, kind = p["number"], p["kind"]
     tail = ""
     if kind in ("choice", "result"):
@@ -379,7 +382,7 @@ def en_spread(p):
     else:
         tail = '<p class="end finis">Finis.</p>'
         links = ['<a href="#cover" data-dir="back"><span class="hand">☞</span> To begin anew, turn back to the cover.</a>']
-    img = webp_data_uri(p["image"], QUALITY_MONO)
+    img = webp_data_uri(src, p["image"], QUALITY_MONO)
     return f"""
 <section tabindex="-1" class="spread {kind}" id="p{n}" aria-label="Passage {n}">
   <div class="page left text-page">
@@ -392,11 +395,11 @@ def en_spread(p):
 </section>"""
 
 
-def build_en():
-    story = tomllib.loads(STORY_EN.read_text(encoding="utf-8"))
+def build_en(src):
+    story = src.story("en")
     book = {k: curly(html.escape(v, quote=False)) if isinstance(v, str) else v for k, v in story["book"].items()}
-    cover = webp_data_uri(story["book"]["cover_image"], QUALITY_COVER)
-    body = "\n".join(en_spread(p) for p in story["paragraph"])
+    cover = webp_data_uri(src, story["book"]["cover_image"], QUALITY_COVER)
+    body = "\n".join(en_spread(src, p) for p in story["paragraph"])
     title = f"{book['title_main']} {book['title_sub']}"
 
     page = f"""<!doctype html>
@@ -442,9 +445,7 @@ def build_en():
 </body>
 </html>
 """
-    OUT_EN.parent.mkdir(parents=True, exist_ok=True)
-    OUT_EN.write_text(page, encoding="utf-8")
-    print(f"{OUT_EN.relative_to(ROOT)} ({OUT_EN.stat().st_size / 1024 / 1024:.1f} MB)")
+    write(src.slug("en"), page)
 
 
 CSS_EN = """
@@ -771,6 +772,7 @@ PAGE_JS = """
 
 
 if __name__ == "__main__":
-    targets = sys.argv[1:] or ["ja", "en"]
-    for target in targets:
-        {"ja": build_ja, "en": build_en}[target]()
+    args = parse_args("HTML 版を書き出す")
+    for src in args.books:
+        for lang in args.langs:
+            {"ja": build_ja, "en": build_en}[lang](src)
