@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>竜の迷宮と錆びた剣 — ゲームブック</title>
+<meta name="description" content="君が主人公になるアドベンチャーゲームブック。日本語版と英語版を、ブラウザかPDFで。">
+<meta name="author" content="奥山晋">
+<meta property="og:title" content="竜の迷宮と錆びた剣">
+<meta property="og:description" content="君が主人公になるアドベンチャーゲームブック">
+<meta property="og:image" content="https://gamebook.engawa5656.com/assets/cover.webp">
+<style>
+:root {
+  --paper: #f3ecda;
+  --ink: #2a2420;
+  --soft: #cdbfa8;
+  --accent: #b6432f;
+  --desk-1: #3a332d;
+  --desk-2: #191513;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  min-height: 100vh;
+  background: radial-gradient(ellipse at top, var(--desk-1) 0%, var(--desk-2) 75%) fixed;
+  color: var(--paper);
+  font-family: "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Yu Mincho", YuMincho, "Noto Serif JP", serif;
+  line-height: 1.7;
+}
+main { max-width: 920px; margin: 0 auto; padding: 48px 20px 32px; }
+header { text-align: center; margin-bottom: 40px; }
+.eyebrow { margin: 0; font-size: 13px; letter-spacing: 0.3em; color: var(--soft); }
+h1 { margin: 10px 0 4px; font-size: clamp(28px, 6vw, 44px); letter-spacing: 0.12em; font-weight: 700; }
+.en-title { margin: 0; font-size: clamp(14px, 2.6vw, 18px); font-style: italic; color: var(--soft); letter-spacing: 0.02em; }
+.lead { max-width: 34em; margin: 20px auto 0; color: var(--soft); font-size: 15px; }
+
+.shelf { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 32px; }
+.book {
+  display: grid;
+  grid-template-columns: 132px 1fr;
+  gap: 18px;
+  align-items: start;
+  padding: 20px;
+  background: rgba(243, 236, 218, 0.05);
+  border: 1px solid rgba(243, 236, 218, 0.12);
+  border-radius: 6px;
+}
+.cover {
+  position: relative;
+  display: block;
+  aspect-ratio: 105 / 148;
+  background: #222 center / cover no-repeat url("assets/cover.webp");
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
+  border-radius: 2px;
+}
+.cover span {
+  position: absolute;
+  color: var(--paper);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.9);
+  font-weight: 700;
+}
+.cover.ja span { top: 8px; right: 8px; writing-mode: vertical-rl; font-size: 15px; letter-spacing: 0.12em; }
+.cover.en span { top: 8px; left: 6px; right: 6px; text-align: center; font-size: 12px; line-height: 1.2; font-style: italic; }
+.book h2 { margin: 0; font-size: 19px; letter-spacing: 0.06em; }
+.book .note { margin: 4px 0 14px; font-size: 13px; color: var(--soft); }
+.actions { display: flex; flex-direction: column; gap: 8px; }
+.actions a {
+  display: block;
+  padding: 9px 14px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 15px;
+  text-align: center;
+}
+.actions .read { background: var(--accent); color: #fff; }
+.actions .read:hover { background: #c8523d; }
+.actions .pdf { border: 1px solid rgba(243, 236, 218, 0.35); color: var(--paper); }
+.actions .pdf:hover { background: rgba(243, 236, 218, 0.08); }
+.actions a:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
+.actions small { color: var(--soft); }
+
+footer { margin-top: 48px; text-align: center; font-size: 12px; color: var(--soft); }
+
+@media (max-width: 420px) {
+  .book { grid-template-columns: 100px 1fr; padding: 16px; gap: 14px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">アドベンチャーゲームブック</p>
+    <h1>竜の迷宮と錆びた剣</h1>
+    <p class="en-title">The Dragon’s Labyrinth and the Rusted Sword</p>
+    <p class="lead">君が主人公になって、竜退治に挑む短い冒険です。場面ごとに道を選び、番号の場面へ進んでください。道を誤ると……どうなるかは、読んでのお楽しみ。</p>
+  </header>
+
+  <section class="shelf" aria-label="版">
+    <article class="book">
+      <a class="cover ja" href="library/ryu-no-meikyu.html" aria-label="日本語版をブラウザで読む"><span>竜の迷宮と錆びた剣</span></a>
+      <div>
+        <h2>日本語版</h2>
+        <p class="note">縦書きの文庫見開き。スマホでも読めます。</p>
+        <div class="actions">
+          <a class="read" href="library/ryu-no-meikyu.html">ブラウザで読む</a>
+          <a class="pdf" href="library/ryu-no-meikyu.pdf">PDF <small>（A6・右綴じ）</small></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="book" lang="en">
+      <a class="cover en" href="library/dragons-labyrinth.html" aria-label="Read the English edition in your browser"><span>The Dragon’s Labyrinth</span></a>
+      <div>
+        <h2>English Edition</h2>
+        <p class="note">In the manner of Early Modern English, wherein thou art the hero.</p>
+        <div class="actions">
+          <a class="read" href="library/dragons-labyrinth.html">Read in Browser</a>
+          <a class="pdf" href="library/dragons-labyrinth.pdf">PDF <small>(A6)</small></a>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <footer>© 2026 奥山晋 (Shin Okuyama)</footer>
+</main>
+</body>
+</html>
