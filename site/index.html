@@ -79,6 +79,14 @@ h1 { margin: 10px 0 4px; font-size: clamp(28px, 6vw, 44px); letter-spacing: 0.12
 .actions a:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
 .actions small { color: var(--soft); }
 
+.howto-read { max-width: 40em; margin: 44px auto 0; font-size: 14px; color: var(--soft); }
+.howto-read h2 { font-size: 16px; color: var(--paper); letter-spacing: 0.08em; margin: 0 0 8px; }
+.howto-read ul { margin: 0 0 8px; padding-left: 1.2em; }
+.howto-read li { margin-bottom: 6px; }
+.howto-read strong { color: var(--paper); }
+.howto-read a { color: var(--paper); }
+.howto-read p { margin: 0; }
+
 footer { margin-top: 48px; text-align: center; font-size: 12px; color: var(--soft); }
 
 @media (max-width: 420px) {
@@ -103,6 +111,7 @@ footer { margin-top: 48px; text-align: center; font-size: 12px; color: var(--sof
         <p class="note">縦書きの文庫見開き。スマホでも読めます。</p>
         <div class="actions">
           <a class="read" href="library/ryu-no-meikyu.html">ブラウザで読む</a>
+          <a class="pdf" href="library/ryu-no-meikyu.epub">電子書籍 <small>（EPUB）</small></a>
           <a class="pdf" href="library/ryu-no-meikyu.pdf">PDF <small>（A6・右綴じ）</small></a>
         </div>
       </div>
@@ -115,10 +124,21 @@ footer { margin-top: 48px; text-align: center; font-size: 12px; color: var(--sof
         <p class="note">In the manner of Early Modern English, wherein thou art the hero.</p>
         <div class="actions">
           <a class="read" href="library/dragons-labyrinth.html">Read in Browser</a>
+          <a class="pdf" href="library/dragons-labyrinth.epub">E-book <small>(EPUB)</small></a>
           <a class="pdf" href="library/dragons-labyrinth.pdf">PDF <small>(A6)</small></a>
         </div>
       </div>
     </article>
+  </section>
+
+  <section class="howto-read" aria-label="電子書籍の読み方">
+    <h2>電子書籍（EPUB）の読み方</h2>
+    <ul>
+      <li><strong>Kindle</strong>：EPUBをダウンロードして「Send to Kindle」で送ると、Kindle端末やKindleアプリのライブラリに入ります。スマホなら、ダウンロードしたファイルを共有メニューから「Kindle」へ。PCなら <a href="https://www.amazon.co.jp/sendtokindle">Send to Kindle のページ</a>にドラッグします。</li>
+      <li><strong>Android</strong>：Google Play ブックスの「ファイルをアップロード」から開けます。</li>
+      <li><strong>iPhone / iPad</strong>：ダウンロードしたファイルを「ブック」アプリで開けます。</li>
+    </ul>
+    <p>PDFのページ内リンクは、スマホやKindleでは動かないことがあります。スマホで読むなら、ブラウザ版か電子書籍版がおすすめです。</p>
   </section>
 
   <footer>© 2026 奥山晋 (Shin Okuyama)</footer>
