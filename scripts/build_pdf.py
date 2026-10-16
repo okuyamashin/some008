@@ -1,4 +1,4 @@
-"""PDF 版（文庫サイズ）を書き出す。日本語版は縦書き・右綴じ、英語版は横書き・左綴じ。
+"""PDF 版（文庫サイズ）を書き出す。日本語版は縦書き、英語版は横書き。
 
 使い方:
     build/.venv/bin/python scripts/build_pdf.py                           # books/ 以下の全巻の日本語版と英語版
@@ -12,11 +12,13 @@
 流れ:
     1. 印刷用の HTML（1 ページ = A6 の 1 ページ）を dist/*.print.html に書き出す
     2. Chrome のヘッドレス印刷で PDF にする
-    3. pypdf で綴じ方向・見開き表示とタイトル・著者を書き込む
+    3. pypdf で見開き表示とタイトル・著者を書き込む
 
-見開き表示では表紙が 1 枚で、そのあとは 2 ページずつ並ぶ。
-日本語版（右綴じ）: 表紙 → 扉（右）・遊び方（左）→ 各パラグラフの本文（右）・挿絵（左）
-英語版（左綴じ）:   表紙 → 遊び方（左）・扉（右）→ 各パラグラフの本文（左）・挿絵（右）
+見開きは 1-2、3-4、5-6 ページ…の組で、奇数ページが左、偶数ページが右。
+多くのビューア（Chrome、プレビューなど）は綴じ方向や「表紙だけ 1 枚」の設定を無視してこの組で並べるので、
+どのビューアでも同じ見開きになるよう、ページの並びそのものをこの組に合わせてある。表紙の次は白紙（表紙の裏）。
+日本語版: 表紙・白紙 → 遊び方（左）・扉（右）→ 各パラグラフの挿絵（左）・本文（右）
+英語版:   表紙・白紙 → 遊び方（左）・扉（右）→ 各パラグラフの本文（左）・挿絵（右）
 """
 
 import base64
@@ -82,7 +84,7 @@ def build_ja(src):
     book = story["book"]
     title, subtitle, author, year = (html.escape(book[k]) for k in ("title", "subtitle", "author", "year"))
     cover = jpeg_data_uri(src, book["cover_image"], gray=False)
-    pages = "".join(text_page(p) + image_page(src, p) for p in sorted(story["paragraph"], key=lambda p: p["number"]))
+    pages = "".join(image_page(src, p) + text_page(p) for p in sorted(story["paragraph"], key=lambda p: p["number"]))
     page = f"""<!doctype html>
 <html lang="ja">
 <head>
@@ -97,25 +99,26 @@ def build_ja(src):
   <span class="cover-sub">{subtitle}</span>
   <span class="cover-author">{author}</span>
 </div>
+<div class="pg blank"></div>
+<div class="pg text howto">
+  <h2>この本の遊び方</h2>
+  {paragraphs(book["how_to_play"])}
+  <nav class="choices">{link("冒険を始める", "p1")}</nav>
+</div>
 <div class="pg tobira">
   <h1>{title}</h1>
   <p class="tobira-sub">{subtitle}</p>
   <p class="tobira-author">{author}　作</p>
   <p class="colophon">© {year}　{author}</p>
 </div>
-<div class="pg text howto">
-  <h2>この本の遊び方</h2>
-  {paragraphs(book["how_to_play"])}
-  <nav class="choices">{link("冒険を始める", "p1")}</nav>
-</div>
 {pages}
 </body>
 </html>
 """
-    make_pdf(src.slug("ja"), page, book["title"], book["author"], book["subtitle"], rtl=True)
+    make_pdf(src.slug("ja"), page, book["title"], book["author"], book["subtitle"])
 
 
-def make_pdf(name, page, title, author, subject, rtl):
+def make_pdf(name, page, title, author, subject):
     print_html = ROOT / "dist" / f"{name}.print.html"
     raw_pdf = ROOT / "build" / f"{name}.raw.pdf"
     out_pdf = ROOT / "dist" / f"{name}.pdf"
@@ -137,11 +140,10 @@ def make_pdf(name, page, title, author, subject, rtl):
 
     writer = PdfWriter(clone_from=PdfReader(raw_pdf))
     root = writer._root_object
-    # 表紙を 1 枚にして、そのあとを見開きで並べる
-    root[NameObject("/PageLayout")] = NameObject("/TwoPageRight")
-    root[NameObject("/ViewerPreferences")] = DictionaryObject(
-        {NameObject("/Direction"): NameObject("/R2L" if rtl else "/L2R")}
-    )
+    # 1-2、3-4 ページ…を見開きにする（ページの並びはこの組に合わせてある）。
+    # 日本語版も左から右に並べる。右綴じ（R2L）にすると、それに従うビューアだけ左右が逆になるため。
+    root[NameObject("/PageLayout")] = NameObject("/TwoPageLeft")
+    root[NameObject("/ViewerPreferences")] = DictionaryObject({NameObject("/Direction"): NameObject("/L2R")})
     writer.add_metadata({"/Title": title, "/Author": author, "/Subject": subject})
     with out_pdf.open("wb") as f:
         writer.write(f)
@@ -194,6 +196,7 @@ def build_en(src):
   <span class="cover-sub">{book['subtitle']}</span>
   <span class="cover-author">{book['author']}</span>
 </div>
+<div class="pg blank"></div>
 <div class="pg text howto">
   <h2>How to Use this Book</h2>
   {en_paragraphs(raw["how_to_play"])}
@@ -211,7 +214,7 @@ def build_en(src):
 </body>
 </html>
 """
-    make_pdf(src.slug("en"), page, f"{raw['title_main']} {raw['title_sub']}", raw["author"], raw["subtitle"], rtl=False)
+    make_pdf(src.slug("en"), page, f"{raw['title_main']} {raw['title_sub']}", raw["author"], raw["subtitle"])
 
 
 PRINT_CSS = """
