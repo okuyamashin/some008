@@ -12,3 +12,6 @@ books/*/images/raw/
 # Build outputs
 build/
 dist/
+
+# Original generated icon (keep locally only)
+site/brand/raw/

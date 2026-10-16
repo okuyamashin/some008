@@ -5,17 +5,21 @@
 
 site/index.html を型にして、books/*/story.toml から dist/index.html を作る。
 表紙の画像は dist/assets/<slug_ja>.webp に置く（HTML 版と同じ WebP を使う）。
+あわせて、検索エンジン向けの dist/sitemap.xml と dist/robots.txt も書き出す。
+サイトマップには入口ページと、各巻の日英のブラウザ版と PDF を載せる（EPUB は検索結果から開けないので載せない）。
 """
 
 import html
 import re
 import shutil
+from datetime import datetime, timezone
 from string import Template
 
 from books import ROOT, all_books
 from build_html import QUALITY_COVER, curly, webp_path
 
 TEMPLATE = ROOT / "site" / "index.html"
+SITE = "https://gamebook.engawa5656.com"
 BLOCK = re.compile(r"[ \t]*<!-- 本ごとに繰り返す -->\n(?P<body>.*?)[ \t]*<!-- ここまで -->\n", re.S)
 
 
@@ -28,7 +32,6 @@ def main():
     page = Template(page).safe_substitute(
         page_title=f"{single} — ゲームブック" if single else "アドベンチャーゲームブック",
         og_title=single or "アドベンチャーゲームブック",
-        og_cover=f"assets/{books[0].slug_ja}.webp",
     )
     block = Template(BLOCK.search(page).group("body"))
 
@@ -53,6 +56,48 @@ def main():
     out = ROOT / "dist" / "index.html"
     out.write_text(page, encoding="utf-8")
     print(f"{out.relative_to(ROOT)} ({len(books)} 冊)")
+    write_sitemap(books)
+
+
+def lastmod(path):
+    """書き出したファイルの更新日（なければ今日）。"""
+    t = path.stat().st_mtime if path.exists() else datetime.now().timestamp()
+    return datetime.fromtimestamp(t, timezone.utc).strftime("%Y-%m-%d")
+
+
+def write_sitemap(books):
+    dist = ROOT / "dist"
+    entries = [f"""  <url>
+    <loc>{SITE}/</loc>
+    <lastmod>{lastmod(dist / "index.html")}</lastmod>
+  </url>"""]
+    for src in books:
+        # 同じ本の日本語版と英語版を、互いの別言語版として示す（hreflang）
+        alternates = "\n".join(
+            f'    <xhtml:link rel="alternate" hreflang="{lang}" href="{SITE}/library/{src.slug(lang)}.html"/>'
+            for lang in ("ja", "en")
+        )
+        for lang in ("ja", "en"):
+            name = src.slug(lang)
+            entries.append(f"""  <url>
+    <loc>{SITE}/library/{name}.html</loc>
+    <lastmod>{lastmod(dist / f"{name}.html")}</lastmod>
+{alternates}
+  </url>""")
+            entries.append(f"""  <url>
+    <loc>{SITE}/library/{name}.pdf</loc>
+    <lastmod>{lastmod(dist / f"{name}.pdf")}</lastmod>
+  </url>""")
+    sitemap = dist / "sitemap.xml"
+    sitemap.write_text(
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
+        + "\n".join(entries)
+        + "\n</urlset>\n",
+        encoding="utf-8",
+    )
+    (dist / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n", encoding="utf-8")
+    print(f"{sitemap.relative_to(ROOT)} ({len(entries)} 件), dist/robots.txt")
 
 
 if __name__ == "__main__":

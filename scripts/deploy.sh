@@ -9,6 +9,8 @@
 #
 # 置き場所:
 #   /index.html                     入口ページ（dist/index.html。型は site/index.html）
+#   /sitemap.xml, /robots.txt       検索エンジン向け（build_index.py が書き出す）
+#   /favicon.ico ほか、/og.png       アイコンと SNS 共有用の画像（site/brand/。build_brand.py が書き出す）
 #   /assets/<slug_ja>.webp          入口ページの表紙
 #   /library/*.html, *.pdf, *.epub  書き出した本（dist/）。名前は story.toml の slug_ja / slug_en
 set -eu
@@ -24,7 +26,7 @@ EDITIONS=$(python3 scripts/books.py "$@")
 COVERS=$(python3 scripts/books.py | awk -F '\t' '$1 == "ja" { print $2 }')
 
 TAB=$(printf '\t')
-for f in dist/index.html $(for slug in $COVERS; do echo "dist/assets/$slug.webp"; done); do
+for f in dist/index.html dist/sitemap.xml dist/robots.txt site/brand/favicon.ico site/brand/apple-touch-icon.png site/brand/icon-512.png site/brand/og.png $(for slug in $COVERS; do echo "dist/assets/$slug.webp"; done); do
   [ -f "$f" ] || { echo "見つかりません: $f（先に python3 scripts/build_index.py を実行してください）" >&2; exit 1; }
 done
 
@@ -51,6 +53,12 @@ disposition() {
 
 echo "アップロード:"
 put dist/index.html index.html "text/html; charset=utf-8" "public, max-age=300"
+put dist/sitemap.xml sitemap.xml "application/xml; charset=utf-8" "public, max-age=3600"
+put dist/robots.txt robots.txt "text/plain; charset=utf-8" "public, max-age=3600"
+put site/brand/favicon.ico favicon.ico "image/x-icon" "public, max-age=86400"
+put site/brand/apple-touch-icon.png apple-touch-icon.png "image/png" "public, max-age=86400"
+put site/brand/icon-512.png icon-512.png "image/png" "public, max-age=86400"
+put site/brand/og.png og.png "image/png" "public, max-age=86400"
 for slug in $COVERS; do
   put "dist/assets/$slug.webp" "assets/$slug.webp" "image/webp" "public, max-age=86400"
 done

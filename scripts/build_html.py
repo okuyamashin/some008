@@ -43,6 +43,37 @@ def webp_data_uri(src, name, quality):
     return "data:image/webp;base64," + base64.b64encode(webp_path(src, name, quality).read_bytes()).decode()
 
 
+# Google アナリティクスのタグ。ブラウザ版の本と入口ページに入れる（PDF 用の印刷ページと EPUB には入れない）
+GTAG = """<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-407MPDJGV0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-407MPDJGV0');
+</script>"""
+
+
+SITE = "https://gamebook.engawa5656.com"
+
+
+def share_meta(title, description, slug):
+    """ファビコンと、SNS でリンクを共有したときの書名・紹介文・画像（画像は全巻共通の og.png）。"""
+    t, d = html.escape(curly(title)), html.escape(curly(description))
+    return f"""<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="book">
+<meta property="og:site_name" content="アドベンチャーゲームブック">
+<meta property="og:url" content="{SITE}/library/{slug}.html">
+<meta property="og:title" content="{t}">
+<meta property="og:description" content="{d}">
+<meta property="og:image" content="{SITE}/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">"""
+
+
 def tcy(number):
     """縦書きの中で数字を横に並べる（縦中横）。"""
     return f'<span class="tcy">{number}</span>'
@@ -97,11 +128,13 @@ def build_ja(src):
     page = f"""<!doctype html>
 <html lang="ja" data-binding="rtl">
 <head>
+{GTAG}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="{author}">
 <meta name="description" content="{subtitle}">
 <title>{title}</title>
+{share_meta(book["title"], book["lead"], src.slug("ja"))}
 <script>document.documentElement.classList.add("js")</script>
 <style>{CSS}</style>
 </head>
@@ -405,11 +438,13 @@ def build_en(src):
     page = f"""<!doctype html>
 <html lang="en" data-binding="ltr">
 <head>
+{GTAG}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="{book['author']}">
 <meta name="description" content="{book['subtitle']}">
 <title>{title}</title>
+{share_meta(story["book"]["title_main"] + " " + story["book"]["title_sub"], story["book"]["subtitle"], src.slug("en"))}
 <script>document.documentElement.classList.add("js")</script>
 <style>{font_faces()}
 {CSS_EN}</style>
