@@ -59,8 +59,9 @@ def paragraphs(text):
     return "\n".join(out)
 
 
-def choice_link(label, to):
-    return f'<a href="#p{to}"><span class="mark">◆</span>{html.escape(label)}<span class="to">{tcy(to)}へ</span></a>'
+def choice_link(label, to, back=False):
+    attr = ' data-dir="back"' if back else ""
+    return f'<a href="#p{to}"{attr}><span class="mark">◆</span>{html.escape(label)}<span class="to">{tcy(to)}へ</span></a>'
 
 
 def spread(p):
@@ -71,13 +72,13 @@ def spread(p):
         links = [choice_link(c["label"], c["to"]) for c in p["choices"]]
     elif kind == "bad":
         tail = '<p class="end">——おしまい</p>'
-        links = [choice_link("気を取り直して、やり直す", p["back"])]
+        links = [choice_link("気を取り直して、やり直す", p["back"], back=True)]
     elif kind == "ending":
         tail = '<p class="end">——めでたし、めでたし</p>'
-        links = ['<a href="#intro"><span class="mark">◆</span>最初から読む</a>']
+        links = ['<a href="#intro" data-dir="back"><span class="mark">◆</span>最初から読む</a>']
     img = webp_data_uri(p["image"], QUALITY_MONO)
     return f"""
-<section class="spread {kind}" id="p{n}" aria-label="パラグラフ{n}">
+<section tabindex="-1" class="spread {kind}" id="p{n}" aria-label="パラグラフ{n}">
   <div class="page left illust"><img src="{img}" alt="" decoding="async"></div>
   <div class="page right text-page">
     <div class="num">{n}</div>
@@ -96,18 +97,19 @@ def build_ja():
     body = "\n".join(spread(p) for p in story["paragraph"])
 
     page = f"""<!doctype html>
-<html lang="ja">
+<html lang="ja" data-binding="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="{author}">
 <meta name="description" content="{subtitle}">
 <title>{title}</title>
+<script>document.documentElement.classList.add("js")</script>
 <style>{CSS}</style>
 </head>
 <body>
 
-<section class="spread cover" id="cover" aria-label="表紙">
+<section tabindex="-1" class="spread cover" id="cover" aria-label="表紙">
   <a class="page cover-page" href="#intro" style="background-image:url({cover})">
     <span class="cover-title">{title}</span>
     <span class="cover-sub">{subtitle}</span>
@@ -116,7 +118,7 @@ def build_ja():
   </a>
 </section>
 
-<section class="spread intro" id="intro" aria-label="扉と遊び方">
+<section tabindex="-1" class="spread intro" id="intro" aria-label="扉と遊び方">
   <div class="page left text-page howto">
     <h2>この本の遊び方</h2>
     {paragraphs(book["how_to_play"])}
@@ -130,6 +132,7 @@ def build_ja():
   </div>
 </section>
 {body}
+<script>{PAGE_JS}</script>
 </body>
 </html>
 """
@@ -171,9 +174,19 @@ body {
   aspect-ratio: 210 / 148;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
 }
-.spread:target,
-body:not(:has(.spread:target)) #cover { display: flex; animation: turn 0.35s ease; }
+html:not(.js) .spread:target,
+html:not(.js) body:not(:has(.spread:target)) #cover { display: flex; animation: turn 0.35s ease; }
+html.js .spread.current, html.js .spread.leaving { display: flex; }
+.spread { grid-area: 1 / 1; }
+.spread.leaving { z-index: 2; }
+.spread:focus { outline: none; }
 @keyframes turn { from { opacity: 0; } to { opacity: 1; } }
+/* めくれる紙（JS が作る） */
+.leaf { position: fixed; z-index: 10; pointer-events: none; transform-style: preserve-3d; will-change: transform; }
+.leaf .face { position: absolute; inset: 0; display: flex; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.leaf .face > .page { flex: 1 1 100%; height: 100%; }
+.leaf .face.back { transform: rotateY(180deg); }
+.leaf .shade { position: absolute; inset: 0; background: #1e140a; opacity: 0; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .spread { animation: none !important; } }
 
 .page {
@@ -347,9 +360,10 @@ def en_paragraphs(text):
     return "\n".join(out)
 
 
-def en_choice(label, to):
+def en_choice(label, to, back=False):
+    attr = ' data-dir="back"' if back else ""
     return (
-        f'<a href="#p{to}"><span class="hand">☞</span> {curly(html.escape(label, quote=False))}, '
+        f'<a href="#p{to}"{attr}><span class="hand">☞</span> {curly(html.escape(label, quote=False))}, '
         f'turn to <span class="to">{to}</span>.</a>'
     )
 
@@ -361,13 +375,13 @@ def en_spread(p):
         links = [en_choice(c["label"], c["to"]) for c in p["choices"]]
     elif kind == "bad":
         tail = '<p class="end">Here endeth thy tale.</p>'
-        links = [en_choice("Take heart and try again", p["back"])]
+        links = [en_choice("Take heart and try again", p["back"], back=True)]
     else:
         tail = '<p class="end finis">Finis.</p>'
-        links = ['<a href="#intro"><span class="hand">☞</span> To begin anew, turn back to the first page.</a>']
+        links = ['<a href="#intro" data-dir="back"><span class="hand">☞</span> To begin anew, turn back to the first page.</a>']
     img = webp_data_uri(p["image"], QUALITY_MONO)
     return f"""
-<section class="spread {kind}" id="p{n}" aria-label="Passage {n}">
+<section tabindex="-1" class="spread {kind}" id="p{n}" aria-label="Passage {n}">
   <div class="page left text-page">
     <div class="num">❦ {n} ❦</div>
     {en_paragraphs(p["text"])}
@@ -386,19 +400,20 @@ def build_en():
     title = f"{book['title_main']} {book['title_sub']}"
 
     page = f"""<!doctype html>
-<html lang="en">
+<html lang="en" data-binding="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="{book['author']}">
 <meta name="description" content="{book['subtitle']}">
 <title>{title}</title>
+<script>document.documentElement.classList.add("js")</script>
 <style>{font_faces()}
 {CSS_EN}</style>
 </head>
 <body>
 
-<section class="spread cover" id="cover" aria-label="Cover">
+<section tabindex="-1" class="spread cover" id="cover" aria-label="Cover">
   <a class="page cover-page" href="#intro" style="background-image:url({cover})">
     <span class="cover-title"><span class="t1">{book['title_main']}</span><span class="t2">{book['title_sub']}</span></span>
     <span class="cover-sub">{book['subtitle']}</span>
@@ -407,7 +422,7 @@ def build_en():
   </a>
 </section>
 
-<section class="spread intro" id="intro" aria-label="How to use this book, and title page">
+<section tabindex="-1" class="spread intro" id="intro" aria-label="How to use this book, and title page">
   <div class="page left text-page howto">
     <h2>How to Use this Book</h2>
     {en_paragraphs(story["book"]["how_to_play"])}
@@ -423,6 +438,7 @@ def build_en():
   </div>
 </section>
 {body}
+<script>{PAGE_JS}</script>
 </body>
 </html>
 """
@@ -463,9 +479,19 @@ body {
   aspect-ratio: 210 / 148;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
 }
-.spread:target,
-body:not(:has(.spread:target)) #cover { display: flex; animation: turn 0.35s ease; }
+html:not(.js) .spread:target,
+html:not(.js) body:not(:has(.spread:target)) #cover { display: flex; animation: turn 0.35s ease; }
+html.js .spread.current, html.js .spread.leaving { display: flex; }
+.spread { grid-area: 1 / 1; }
+.spread.leaving { z-index: 2; }
+.spread:focus { outline: none; }
 @keyframes turn { from { opacity: 0; } to { opacity: 1; } }
+/* めくれる紙（JS が作る） */
+.leaf { position: fixed; z-index: 10; pointer-events: none; transform-style: preserve-3d; will-change: transform; }
+.leaf .face { position: absolute; inset: 0; display: flex; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.leaf .face > .page { flex: 1 1 100%; height: 100%; }
+.leaf .face.back { transform: rotateY(180deg); }
+.leaf .shade { position: absolute; inset: 0; background: #1e140a; opacity: 0; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .spread { animation: none !important; } }
 
 .page {
@@ -608,6 +634,136 @@ body:not(:has(.spread:target)) #cover { display: flex; animation: turn 0.35s eas
   .cover-start { font-size: 14px; }
   .intro .titlepage { order: -1; min-height: 100svh; font-size: 17px; }
 }
+"""
+
+
+# ページめくり。選択肢で進むときと、ブラウザの「戻る」や data-dir="back" のリンクで戻るときで、めくる向きを変える。
+# 綴じ方向（data-binding）で、進むときにめくれる側が決まる：右綴じ（rtl）は左ページ、左綴じ（ltr）は右ページ。
+PAGE_JS = """
+(() => {
+  const root = document.documentElement;
+  const ltr = root.dataset.binding === "ltr";
+  const spreads = new Map([...document.querySelectorAll(".spread")].map((s) => [s.id, s]));
+  const narrow = matchMedia("(max-width: 720px), (max-aspect-ratio: 4 / 5)");
+  const still = matchMedia("(prefers-reduced-motion: reduce)");
+  const fromHash = () => spreads.get(decodeURIComponent(location.hash.slice(1))) || spreads.get("cover");
+
+  let current = fromHash();
+  current.classList.add("current");
+  let index = (history.state && history.state.i) || 0;
+  history.replaceState({ i: index }, "");
+  history.scrollRestoration = "manual";
+  // 進行中のめくりの後片付け。次のめくりを始める前に必ず済ませる。
+  let pending = null;
+  function settle() {
+    if (pending) {
+      const p = pending;
+      pending = null;
+      p();
+    }
+  }
+
+  function show(next, dir) {
+    if (!next || next === current) return;
+    settle();
+    const old = current;
+    current = next;
+    next.classList.add("current");
+    window.scrollTo(0, 0);
+    next.focus({ preventScroll: true });
+    if (still.matches) {
+      old.classList.remove("current");
+    } else if (narrow.matches || old.id === "cover" || next.id === "cover") {
+      old.classList.remove("current");
+      const dx = (dir === "forward") === ltr ? 48 : -48;
+      const slide = next.animate(
+        [{ opacity: 0, transform: `translateX(${dx}px)` }, { opacity: 1, transform: "none" }],
+        { duration: 380, easing: "cubic-bezier(.2,.7,.3,1)" }
+      );
+      const stop = () => { slide.cancel(); if (pending === stop) pending = null; };
+      pending = stop;
+      setTimeout(stop, 450);
+    } else {
+      flip(old, next, dir);
+    }
+  }
+
+  function face(page, spread, back) {
+    const f = document.createElement("div");
+    const kinds = [...spread.classList].filter((c) => !["spread", "current", "leaving"].includes(c));
+    f.className = ["face", ...kinds, back ? "back" : ""].join(" ");
+    f.append(page.cloneNode(true));
+    const shade = document.createElement("div");
+    shade.className = "shade";
+    f.append(shade);
+    return f;
+  }
+
+  function flip(old, next, dir) {
+    const side = (dir === "forward") === ltr ? "right" : "left";
+    const other = side === "right" ? "left" : "right";
+    const oldPage = old.querySelector(`:scope > .page.${side}`);
+    const newPage = next.querySelector(`:scope > .page.${other}`);
+    const r = oldPage.getBoundingClientRect();
+    const leaf = document.createElement("div");
+    leaf.className = "leaf";
+    Object.assign(leaf.style, {
+      left: r.left + "px", top: r.top + "px", width: r.width + "px", height: r.height + "px",
+      transformOrigin: side === "right" ? "left center" : "right center",
+    });
+    const front = face(oldPage, old, false);
+    const back = face(newPage, next, true);
+    leaf.append(front, back);
+    document.body.append(leaf);
+    old.classList.add("leaving");
+    oldPage.style.visibility = "hidden";
+
+    const angle = side === "right" ? -180 : 180;
+    const opts = { duration: 820, easing: "cubic-bezier(.45,.05,.25,1)", fill: "forwards" };
+    const turn = leaf.animate(
+      [
+        { transform: "perspective(2600px) rotateY(0deg)" },
+        { transform: `perspective(2600px) rotateY(${angle / 2}deg) scale(1.02)`, offset: 0.5 },
+        { transform: `perspective(2600px) rotateY(${angle}deg)` },
+      ],
+      opts
+    );
+    front.querySelector(".shade").animate([{ opacity: 0 }, { opacity: 0.4 }], { ...opts, duration: opts.duration / 2 });
+    back.querySelector(".shade").animate([{ opacity: 0.4 }, { opacity: 0.4, offset: 0.5 }, { opacity: 0 }], opts);
+    let finished = false;
+    const done = () => {
+      if (finished) return;
+      finished = true;
+      leaf.remove();
+      oldPage.style.visibility = "";
+      old.classList.remove("leaving");
+      if (old !== current) old.classList.remove("current");
+      if (pending === done) pending = null;
+    };
+    pending = done;
+    turn.onfinish = done;
+    // タブが裏にあるとアニメーションが止まることがあるので、時間で必ず片付ける
+    setTimeout(done, opts.duration + 150);
+  }
+
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const next = spreads.get(a.getAttribute("href").slice(1));
+    if (!next) return;
+    e.preventDefault();
+    index += 1;
+    history.pushState({ i: index }, "", "#" + next.id);
+    show(next, a.dataset.dir === "back" ? "back" : "forward");
+  });
+
+  window.addEventListener("popstate", (e) => {
+    const i = (e.state && e.state.i) || 0;
+    const dir = i < index ? "back" : "forward";
+    index = i;
+    show(fromHash(), dir);
+  });
+})();
 """
 
 
