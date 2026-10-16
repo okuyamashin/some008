@@ -1,0 +1,318 @@
+# Early Modern English flavor
+#
+# Same structure as story.toml (numbers, kinds, images, links).
+# Choice labels are completed as "<label>, turn to <n>."
+# Mood over correctness: modern spelling, archaic grammar where it sounds good.
+
+[book]
+title_main = "The Wisp-Lit Marsh"
+title_sub = "and the Old Lantern"
+subtitle = "A Gamebook wherein Thou Art the Hero"
+title_page_text = "Being a True and Most Cunning Account of a Traveller's Venture against the Witch of the Marsh; wherein Thou Thyself art the Hero, and must Choose thy Path."
+author = "Shin Okuyama"
+year = "MMXXVI"
+copyright = "© 2026 Shin Okuyama"
+cover_image = "00_cover_v1"
+how_to_play = """
+In this book, thou art the hero.
+
+At the close of each passage thou shalt be offered a choice. Choose but one, and turn to the passage whose number is shown.
+
+Shouldst thou choose amiss, thine adventure may come to an untimely end. Fear not: take heart, and thou mayest return to the place where thou didst stray.
+
+Now let thine adventure begin. Thy journey starteth in a small village beside a misty marsh.
+"""
+
+[[paragraph]]
+number = 1
+key = "01c_choice"
+kind = "choice"
+image = "01c_choice_v1"
+text = """
+Thou art a traveller far from home, and in the course of thy wanderings thou comest unto a small village beside a misty marsh. At dusk the lanes are near empty, and over every doorway hangeth a bundle of dried herbs against evil.
+
+By the well, an elder leaning on a staff stayeth thee.
+
+"Good traveller, lend us thine aid. The witch who dwelleth deep in the marsh sendeth out will-o'-wisps every night. Our cattle and sheep follow them into the marsh and come not back. Last month two of our young folk were lost besides."
+
+Beyond the village, pale blue lights already drift to and fro above the marsh.
+
+Thou hast naught but thy worn travelling gear. Yet the elder looketh upon thee with beseeching eyes.
+"""
+choices = [
+  { label = "If thou wilt take up his cause", to = 7 },
+  { label = "If thou wouldst courteously decline", to = 12 },
+]
+
+[[paragraph]]
+number = 7
+key = "01r_result"
+kind = "result"
+image = "01r_result_v1"
+text = """
+"Thou wilt go? Heaven be praised!"
+
+From the back of his house the elder bringeth an old, sooty lantern. Its iron frame is rusted and its glass is clouded. There is nothing within.
+
+"This lantern hath long been kept in our village. 'Tis said that once a man caught a wisp in it, and that within it a wisp will sleep as meek as a lamb."
+
+Then he lowereth his voice.
+
+"Mark me well. Chase a wisp, and it fleeth. Wait still, and it cometh to thee of its own accord. Never, never chase it."
+
+Thou hangest the lantern at thy belt and settest out for the marsh while the mist yet lieth thick.
+"""
+choices = [
+  { label = "To set out for the marsh", to = 4 },
+]
+
+[[paragraph]]
+number = 12
+key = "01b_bad"
+kind = "bad"
+image = "01b_bad_v1"
+back = 1
+text = """
+"So be it," saith the elder, and he shutteth his door.
+
+Thou wouldst leave the village, but the mist hath swallowed every road. And so thou resolvest to lodge one night at the inn.
+
+But the next morning the mist hath not lifted. Nor the morning after, nor the morning after that.
+
+One night becometh thirty years. Now thou art known as the finest weather-teller in all the village.
+
+Every morning thou standest in the square and proclaimest, most gravely: "Today, mist."
+
+In thirty years thou hast not been wrong once.
+"""
+
+[[paragraph]]
+number = 4
+key = "02c_choice"
+kind = "choice"
+image = "02c_choice_v1"
+text = """
+Stepping into the marsh, the mire sucketh at thy boots and the stink of rotten reeds filleth thy nose. The mist is so thick thou canst not see three paces ahead.
+
+As the sun goeth down, a single pale blue light riseth softly beyond the mist. A will-o'-wisp.
+
+It wavereth before thee, drifting a little away and then pausing, as if to say, "Follow me." Beyond it there seemeth to run a dry path.
+
+The lantern at thy belt seemeth to tremble faintly, and the elder's words come back to thee.
+
+The wisp drifteth a little further off, and wavereth there, waiting for thee.
+"""
+choices = [
+  { label = "If thou wouldst chase the wisp", to = 14 },
+  { label = "If thou wilt hold up the lantern and wait", to = 10 },
+]
+
+[[paragraph]]
+number = 10
+key = "02r_result"
+kind = "result"
+image = "02r_result_v1"
+text = """
+Thou standest still, openest the lantern, and holdest it high.
+
+The wisp wavereth as if in wonder, then little by little draweth near. Once round the lantern it goeth, then twice, and on the third turn it slippeth inside.
+
+Thou gently closest the lid, and the clouded glass beginneth to shine pale blue. Within, the wisp curleth up like a sleeping cat.
+
+Thou hast gained the Wisp Lantern!
+
+When its light falleth upon the mist, a line of stepping stones appeareth across the marsh. The wisp is showing thee the safe way.
+"""
+choices = [
+  { label = "To follow the path of light", to = 9 },
+]
+
+[[paragraph]]
+number = 14
+key = "02b_bad"
+kind = "bad"
+image = "02b_bad_v1"
+back = 4
+text = """
+Thou chasest the wisp. It fleeth. Thou chasest it. It fleeth again.
+
+Running headlong, thou slippest and plungest face first into the mud. When thou liftest thy head, dozens of frogs are gazing at thee with round, round eyes.
+
+Plastered with mud and crowned with a wreath of reeds, thou art taken by the frogs for their king.
+
+Ever since, thou hast lived as the King of the Frogs. Every night, at thy direction, they raise a mighty chorus.
+
+The villagers say the marsh choir hath of late grown wondrous well in tune.
+"""
+
+[[paragraph]]
+number = 9
+key = "03c_choice"
+kind = "choice"
+image = "03c_choice_v1"
+text = """
+Following the wisp's light, thou seest through the mist a hut set high upon stout stilts. A green glow spilleth from its windows. It must be the witch's house.
+
+Two ways lead to it.
+
+One is a plank bridge laid across the marsh. An old signpost reads "SHORTCUT." The boards are blackened here and there, and the water beneath is strangely still.
+
+The other is the line of stepping stones lit by thy lantern. It is the long way round, and the gaps between the stones are wide.
+
+Within the lantern, the wisp leaneth eagerly toward the stepping stones.
+"""
+choices = [
+  { label = "If thou wouldst cross by the plank bridge", to = 13 },
+  { label = "If thou wilt cross by the lantern-lit stones", to = 2 },
+]
+
+[[paragraph]]
+number = 2
+key = "03r_result"
+kind = "result"
+image = "03r_result_v1"
+text = """
+Holding up thy lantern, thou crossest the stones one by one. Every stone the wisp lighteth beareth thy weight full well.
+
+Reaching the foot of the hut, thou lookest back, just as the "shortcut" bridge sinketh creaking into the mud, though no one standeth upon it.
+
+It seemeth the bridge was a snare of the witch's making.
+
+Thou climbest the rope ladder hung from the stilts and standest at the door of the hut. It standeth a little ajar, and from within floweth warm air and the scent of herbs.
+"""
+choices = [
+  { label = "To enter the hut", to = 6 },
+]
+
+[[paragraph]]
+number = 13
+key = "03b_bad"
+kind = "bad"
+image = "03b_bad_v1"
+back = 9
+text = """
+Thou settest foot upon the plank bridge. At the third step the board breaketh, and thou sinkest slowly into the mud.
+
+Thy head yet standeth above the mire, but struggle as thou wilt, thou canst get no further out.
+
+The sun riseth and setteth. Anon a heron flieth down and alighteth upon thy head. Liking it well, it buildeth a nest there.
+
+Spring cometh, and three chicks are hatched.
+
+Now thou art known as one of the wonders of the marsh, the Traveller with the Heron's Nest. Folk come from distant towns to gaze upon thee.
+"""
+
+[[paragraph]]
+number = 6
+key = "04c_choice"
+kind = "choice"
+image = "04c_choice_v1"
+text = """
+Within, the hut is cosier than thou didst expect. A fire crackleth in the hearth, and the shelves are crowded with dried herbs and jars of something or other.
+
+Before the hearth standeth a deep, soft armchair, with a little card hanging from it: "Weary traveller, pray rest thyself."
+
+Thy legs, after crossing the marsh, are stiff as sticks.
+
+Yet looking closer, thou seest countless scratches upon its arms, as if made by fingernails. And when thou drawest near the chair, the wisp in thy lantern shrinketh small as if in fear.
+
+From the top of the stair at the back cometh a sound of something bubbling in a pot.
+"""
+choices = [
+  { label = "If thou wilt rest a while in the chair", to = 3 },
+  { label = "If thou wouldst pass the chair by and climb the stair", to = 11 },
+]
+
+[[paragraph]]
+number = 11
+key = "04r_result"
+kind = "result"
+image = "04r_result_v1"
+text = """
+Paying the chair no heed, thou makest for the stair.
+
+Behind thee the chair creaketh. Turning, thou seest its arms slowly closing upon nothing. It had been waiting all this while for someone to sit. It creaketh once more, most disappointed.
+
+As thou climbest, the green glow groweth brighter. Beneath the bubbling of the pot thou hearest a cracked old voice humming.
+
+The wisp in thy lantern flareth up bright, as if it knew its fellows lay ahead.
+
+At the top of the stair standeth the door of the witch's chamber.
+"""
+choices = [
+  { label = "To open the door", to = 15 },
+]
+
+[[paragraph]]
+number = 3
+key = "04b_bad"
+kind = "bad"
+image = "04b_bad_v1"
+back = 6
+text = """
+Thou sinkest deep into the chair. It is soft, and warm, and wondrous comfortable.
+
+I shall rest but a moment, thinkest thou, and make to rise, when the arms clasp thee fast. The chair hath taken a great liking to thee.
+
+The witch cometh down the stair, sees thee caught in the chair, and laugheth long. Then she loopeth a skein of half-wound yarn over both thy hands.
+
+Ever since, thou hast served as the witch's yarn-holder. Every night she knitteth before the fire.
+
+The socks she hath knitted now number above three hundred pairs. Not one pair is thine.
+"""
+
+[[paragraph]]
+number = 15
+key = "05c_choice"
+kind = "choice"
+image = "05c_choice_v1"
+text = """
+Thou openest the door. In the midst of the chamber a great cauldron bubbleth, and before it standeth a crook-backed old woman. It is the Witch of the Marsh.
+
+Round about her circle scores of wisps. In their light her shadow stretcheth huge across the walls.
+
+"Well, well, a rare guest. The wisps are mine eyes and my power. I shall gather more lost souls into this marsh, and more, and more."
+
+So saying she cackleth, and glanceth at the lantern at thy belt. For a moment her face groweth stiff.
+
+The wisp within thy lantern twinkleth bright, as if calling to its fellows.
+"""
+choices = [
+  { label = "If thou wouldst beg her pardon and ask leave to go home", to = 5 },
+  { label = "If thou wilt fling open the lantern", to = 8 },
+]
+
+[[paragraph]]
+number = 8
+key = "05r_ending"
+kind = "ending"
+image = "05r_ending_v1"
+text = """
+Thou holdest up the lantern and flingest wide its lid.
+
+One by one, the wisps that circled the witch are drawn into the lantern. Within, it seemeth, is as warm as an old home.
+
+"Stay! Come back!" crieth the witch. But as the last wisp entereth the lantern, her great shadow shrinketh before thine eyes, and there standeth only a crabbed old woman.
+
+Some days hence the mist lifteth from the marsh, and the lost cattle and sheep, and the young folk too, come home to the village.
+
+The Wisp Lantern now lighteth the village square. As for the witch, she keepeth the village herb shop, grumbling the whole day long.
+"""
+
+[[paragraph]]
+number = 5
+key = "05b_bad"
+kind = "bad"
+image = "05b_bad_v1"
+back = 15
+text = """
+"I beg thy pardon. Pray, let me go home." Thou bowest low.
+
+"Well, well, good manners," saith the witch, grinning. "I may let thee go. After thou hast served me as apprentice for a hundred years."
+
+And so thou becamest the apprentice of the Witch of the Marsh.
+
+Every day thou stirrest the cauldron, choppest herbs, and learnest the making of wisps. Thou hast a gift for it. In time the witch leaveth all the wisp-making to thee.
+
+Of late a strange tale goeth about the village: the newer wisps, having led a traveller astray, courteously hand them a map of the way home.
+"""
