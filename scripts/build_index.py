@@ -24,7 +24,8 @@ BLOCK = re.compile(r"[ \t]*<!-- 本ごとに繰り返す -->\n(?P<body>.*?)[ \t]
 
 
 def main():
-    books = all_books()
+    # 公開日の新しい順（同じ日の並びは問わない）
+    books = sorted(all_books(), key=lambda b: b.info["published"], reverse=True)
     page = TEMPLATE.read_text(encoding="utf-8")
     page = re.sub(r"\A(<!doctype html>\n)<!--.*?-->\n", r"\1", page, flags=re.S)  # 型の説明は書き出さない
     # 1 冊だけのときはその本の名前を、何冊もあるときは書棚全体の名前を、ページの名前にする
@@ -47,6 +48,8 @@ def main():
             title_en=curly(html.escape(f"{en['title_main']} {en['title_sub']}", quote=False)),
             title_en_main=curly(html.escape(en["title_main"], quote=False)),
             lead=html.escape(ja["lead"]),
+            published=ja["published"],
+            published_ja=published_ja(ja["published"]),
             slug_ja=src.slug_ja,
             slug_en=src.slug_en,
             cover=cover,
@@ -57,6 +60,12 @@ def main():
     out.write_text(page, encoding="utf-8")
     print(f"{out.relative_to(ROOT)} ({len(books)} 冊)")
     write_sitemap(books)
+
+
+def published_ja(iso):
+    """2026-10-17 → 2026年10月17日"""
+    y, m, d = (int(x) for x in iso.split("-"))
+    return f"{y}年{m}月{d}日"
 
 
 def lastmod(path):

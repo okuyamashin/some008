@@ -31,6 +31,7 @@ author_file_as = "オクヤマ シン"      # 著者名の読み（電子書籍�
 author_en = "Shin Okuyama"            # 英語での著者名（日本語版 EPUB の別言語表記）
 author_en_file_as = "Okuyama, Shin"   # 英語版での並べ替え用（英語版 EPUB の別言語表記は author）
 year = "二〇二六"
+published = "2026-10-17"  # 公開日（入口ページの並び順と表示に使う）
 cover_image = "00_cover_v1"
 # 入口ページ（site/index.html）の紹介文
 lead = "君が主人公になって、密林の神殿の黄金の番人に会いに行く短い冒険です。場面ごとに道を選び、番号の場面へ進んでください。道を誤ると……どうなるかは、読んでのお楽しみ。"

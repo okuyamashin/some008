@@ -18,6 +18,7 @@
 """
 
 import re
+from datetime import date
 import sys
 
 from books import BOOKS_DIR, ROOT, all_books
@@ -97,6 +98,7 @@ author_file_as = "{author.get("author_file_as", "")}"      # 著者名の読み�
 author_en = "{author.get("author_en", "")}"            # 英語での著者名（日本語版 EPUB の別言語表記）
 author_en_file_as = "{author.get("author_en_file_as", "")}"   # 英語版での並べ替え用（英語版 EPUB の別言語表記は author）
 year = ""
+published = "{date.today().isoformat()}"  # 公開日（入口ページの並び順と表示に使う。公開する日に合わせて直す）
 cover_image = "00_cover_v1"
 # 入口ページ（site/index.html）の紹介文
 lead = ""

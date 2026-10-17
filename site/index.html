@@ -83,6 +83,7 @@ h1 { margin: 10px 0 4px; font-size: clamp(28px, 6vw, 44px); letter-spacing: 0.12
 }
 .cover.ja span { top: 8px; right: 8px; writing-mode: vertical-rl; font-size: 15px; letter-spacing: 0.12em; }
 .cover.en span { top: 8px; left: 6px; right: 6px; text-align: center; font-size: 12px; line-height: 1.2; font-style: italic; }
+.published { margin: 10px 0 0; font-size: 13px; letter-spacing: 0.08em; color: var(--soft); }
 .book h2 { margin: 0; font-size: 19px; letter-spacing: 0.06em; }
 .book .note { margin: 4px 0 14px; font-size: 13px; color: var(--soft); }
 .actions { display: flex; flex-direction: column; gap: 8px; }
@@ -124,6 +125,7 @@ footer { margin-top: 48px; text-align: center; font-size: 12px; color: var(--sof
     <h1>${title}</h1>
     <p class="en-title">${title_en}</p>
     <p class="lead">${lead}</p>
+    <p class="published"><time datetime="${published}">${published_ja}</time> 公開</p>
   </header>
 
   <section class="shelf" aria-label="版">
