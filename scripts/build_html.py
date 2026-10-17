@@ -45,13 +45,13 @@ def webp_data_uri(src, name, quality):
 
 # Google アナリティクスのタグ。ブラウザ版の本と入口ページに入れる（PDF 用の印刷ページと EPUB には入れない）
 GTAG = """<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-407MPDJGV0"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PYM92SKPY5"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-407MPDJGV0');
+  gtag('config', 'G-PYM92SKPY5');
 </script>"""
 
 
