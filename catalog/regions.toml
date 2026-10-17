@@ -1,0 +1,339 @@
+# 舞台の地域データ（下書き）
+#
+# 次の本の企画（舞台・立ちはだかるもの・鍵になる持ち物）を自動で選ぶための材料。
+# 地域は現実の土地の雰囲気を借りるだけで、本の中では実在の地名・国名・民族名は使わない（架空の土地の名前を付ける）。
+# 笑えるバッドエンドは主人公の失敗で笑わせ、その土地の人や文化を笑いのネタにしない。
+#
+# 地域ごとの項目:
+#   name        地域の呼び名（企画用。本文には出さない）
+#   mood        雰囲気をひとことで
+#   naming      地名を付けるときの音・言葉の感じ
+#   art         挿絵の [Scene] に足す、その地域らしさの指示（英語）
+#   terrains    舞台になる地形。name は地形、place は地名の例（架空）
+#   antagonists 立ちはだかるもの。resolve は解決の仕方（倒す / 和解 / 知恵 / 呪いを解く など）
+#               items はその解決に使う鍵になる持ち物の候補（before → after）
+#
+# 組み合わせ方: 地域を1つ選び、terrains から1つ、antagonists から1つ、その items から1つを選ぶ。
+
+[[region]]
+id = "west"
+name = "西欧（王道）"
+mood = "剣と魔法の、いちばん典型的なファンタジー"
+naming = "〇〇の迷宮、〇〇の森のような、日本語の素直な名前"
+art = "medieval European villages with thatched roofs, stone castles, oak forests"
+terrains = [
+  { name = "ダンジョン", place = "竜の迷宮" },
+  { name = "森", place = "囁きの森" },
+  { name = "沼地", place = "鬼火の沼" },
+  { name = "古城", place = "灰色の城" },
+  { name = "古い墓地", place = "月影の墓地" },
+]
+[[region.antagonists]]
+name = "黒竜"
+resolve = "倒す"
+items = [{ before = "錆びた剣", after = "聖剣", note = "1冊目" }]
+[[region.antagonists]]
+name = "狼の王"
+resolve = "和解"
+items = [{ before = "ひびの入った角笛", after = "月の角笛", note = "2冊目" }]
+[[region.antagonists]]
+name = "沼の魔女"
+resolve = "知恵"
+items = [{ before = "空の古いランタン", after = "鬼火を灯したランタン", note = "3冊目" }]
+[[region.antagonists]]
+name = "骸骨の騎士"
+resolve = "呪いを解く"
+items = [{ before = "名前の消えた墓標の破片", after = "名前を刻み直した墓標", note = "名前を思い出させて眠らせる" }]
+
+[[region]]
+id = "nordic"
+name = "北欧風"
+mood = "霧のフィヨルド、雪と針葉樹、ルーン文字の石碑"
+naming = "硬い音の短い名前（例: ヨルム谷、スカルド峰）"
+art = "Nordic fjords, pine forests, longhouses with turf roofs, rune stones"
+terrains = [
+  { name = "針葉樹の森", place = "霜牙の森" },
+  { name = "フィヨルド", place = "鴉の入江" },
+  { name = "雪山", place = "白鬚山" },
+  { name = "氷河の洞窟", place = "青氷の洞" },
+]
+[[region.antagonists]]
+name = "橋の下のトロル"
+resolve = "知恵"
+items = [{ before = "空の角杯", after = "蜂蜜酒で満ちた角杯", note = "飲み比べ・なぞなぞ勝負で勝つ" }]
+[[region.antagonists]]
+name = "氷の巨人"
+resolve = "和解"
+items = [{ before = "消えた炉の種火の石", after = "燃える炉の石", note = "凍えていた巨人を温める" }]
+[[region.antagonists]]
+name = "海の大蛇"
+resolve = "倒す"
+items = [{ before = "折れた銛", after = "ルーンを刻んだ銛" }]
+
+[[region]]
+id = "celtic"
+name = "ケルト風"
+mood = "荒野とヒース、霧の湖、立石の輪、妖精の丘"
+naming = "柔らかい響き（例: グレン・モア、霧のロッホ）"
+art = "misty moors with heather, standing stones, stone cottages, lochs"
+terrains = [
+  { name = "荒野", place = "灰ヒースの野" },
+  { name = "湖", place = "霧の湖" },
+  { name = "妖精の丘", place = "緑の塚" },
+  { name = "海辺の崖", place = "鴎の岬" },
+]
+[[region.antagonists]]
+name = "妖精の女王"
+resolve = "知恵"
+items = [{ before = "鉄の釘一本", after = "鉄の釘の首飾り", note = "妖精は鉄を嫌う。約束を守らせる" }]
+[[region.antagonists]]
+name = "湖の怪物"
+resolve = "和解"
+items = [{ before = "古い竪琴（弦が切れている）", after = "銀の弦の竪琴", note = "歌で鎮める" }]
+[[region.antagonists]]
+name = "首なし騎手"
+resolve = "呪いを解く"
+items = [{ before = "錆びた兜", after = "磨かれた兜", note = "失くした首（兜）を返す" }]
+
+[[region]]
+id = "eastern_europe"
+name = "東欧風"
+mood = "白樺の森、玉ねぎ屋根の教会、雪の村、古い城"
+naming = "〜ノフ、〜スカのような響き（例: ボロヴィカ村）"
+art = "birch forests, wooden villages, onion-domed chapels, gothic castles on crags"
+terrains = [
+  { name = "白樺の森", place = "白骨の林" },
+  { name = "古城", place = "鴉ヶ城" },
+  { name = "廃村", place = "灯の消えた村" },
+]
+[[region.antagonists]]
+name = "鶏の足の小屋の魔女"
+resolve = "知恵"
+items = [{ before = "母の形見の小さな人形", after = "囁く人形", note = "人形の助言で三つの難題を解く" }]
+[[region.antagonists]]
+name = "吸血伯爵"
+resolve = "倒す"
+items = [{ before = "曇った銀の鏡", after = "朝日を映す鏡" }]
+[[region.antagonists]]
+name = "不死の魔王"
+resolve = "知恵"
+items = [{ before = "空の卵の殻", after = "針を入れた卵", note = "命を隠した場所を突き止める" }]
+
+[[region]]
+id = "mediterranean"
+name = "地中海風"
+mood = "白い神殿、オリーブ畑、青い海に浮かぶ島"
+naming = "〜ス、〜ア、〜オンの響き（例: ネソス島、ラビリントス）"
+art = "white marble temples, olive groves, rocky Mediterranean islands, Greek-style columns"
+terrains = [
+  { name = "孤島", place = "セイレーンの島" },
+  { name = "地下の迷宮", place = "牛頭の迷宮" },
+  { name = "神殿の遺跡", place = "砕けた月の神殿" },
+  { name = "海辺の洞窟", place = "潮騒の洞" },
+]
+[[region.antagonists]]
+name = "牛頭の怪物"
+resolve = "知恵"
+items = [{ before = "糸巻き", after = "赤い糸を張った糸巻き", note = "迷宮から帰る道" }]
+[[region.antagonists]]
+name = "歌う魔女たち"
+resolve = "知恵"
+items = [{ before = "蜜蝋のかけら", after = "耳栓にした蜜蝋", note = "歌を聞かずに通り抜ける" }]
+[[region.antagonists]]
+name = "石に変える女怪"
+resolve = "倒す"
+items = [{ before = "曇った青銅の盾", after = "鏡のように磨いた盾" }]
+
+[[region]]
+id = "arabian"
+name = "アラビア風"
+mood = "砂丘と蜃気楼、オアシス、隊商宿、星空"
+naming = "〜ード、〜ーン、アル〜の響き（例: アル・ラシード砂漠）"
+art = "desert dunes, oases with palm trees, caravanserais, domed cities, starry desert nights"
+terrains = [
+  { name = "砂漠", place = "蜃気楼の砂海" },
+  { name = "オアシス", place = "月の泉" },
+  { name = "地下宮殿", place = "四十の扉の宮殿" },
+]
+[[region.antagonists]]
+name = "ランプの魔神"
+resolve = "知恵"
+items = [{ before = "すすけた古いランプ", after = "磨かれたランプ", note = "言葉の罠で願いを取り違えさせない" }]
+[[region.antagonists]]
+name = "盗賊の頭"
+resolve = "知恵"
+items = [{ before = "合言葉の書かれた紙片（半分）", after = "揃った合言葉", note = "扉を開けて宝を村に返す" }]
+[[region.antagonists]]
+name = "砂の大蛇"
+resolve = "倒す"
+items = [{ before = "割れた水瓶", after = "尽きない水瓶", note = "砂を泥に変えて動きを封じる" }]
+
+[[region]]
+id = "egyptian"
+name = "エジプト風"
+mood = "大河と葦の原、ピラミッド、象形文字の壁画"
+naming = "〜トゥ、〜メスの響き（例: 葦の都ケム）"
+art = "pyramids, a great river with reed boats, obelisks, temple walls carved with hieroglyph-like patterns (no readable text)"
+terrains = [
+  { name = "砂漠", place = "赤い砂の地" },
+  { name = "ピラミッドの内部", place = "眠れる王の墓" },
+  { name = "大河", place = "葦の大河" },
+]
+[[region.antagonists]]
+name = "なぞなぞの獣"
+resolve = "知恵"
+items = [{ before = "空白の石板", after = "答えが浮かぶ石板", note = "なぞなぞに答える" }]
+[[region.antagonists]]
+name = "ミイラの王"
+resolve = "呪いを解く"
+items = [{ before = "欠けたスカラベの護符", after = "完全なスカラベの護符", note = "盗まれた護符を返して眠らせる" }]
+[[region.antagonists]]
+name = "大河のワニの神"
+resolve = "和解"
+items = [{ before = "枯れた蓮の花", after = "咲いた蓮の花", note = "捧げ物で怒りを鎮める" }]
+
+[[region]]
+id = "indian"
+name = "インド風"
+mood = "密林、寺院の遺跡、象、大河、極彩色の祭り"
+naming = "〜プル、〜ガルの響き（例: 翡翠の都ラトナプル）"
+art = "jungle-covered temple ruins, carved stone elephants, banyan trees, river ghats"
+terrains = [
+  { name = "密林", place = "翡翠の密林" },
+  { name = "寺院の遺跡", place = "千の柱の寺院" },
+  { name = "大河", place = "聖なる大河" },
+]
+[[region.antagonists]]
+name = "大蛇の王"
+resolve = "和解"
+items = [{ before = "割れた笛", after = "蛇使いの笛", note = "音色で心を通わせる" }]
+[[region.antagonists]]
+name = "虎の王"
+resolve = "知恵"
+items = [{ before = "古い真鍮の鏡", after = "磨いた鏡", note = "もっと大きな虎がいると思わせる" }]
+[[region.antagonists]]
+name = "猿の盗賊団"
+resolve = "知恵"
+items = [{ before = "空の果物籠", after = "果物でいっぱいの籠", note = "取引して宝を返させる" }]
+
+[[region]]
+id = "chinese"
+name = "中国風"
+mood = "霧の渓谷、仙人の山、竹林、石の太鼓橋"
+naming = "漢字二〜三文字の名前（例: 雲霧山、翠竹林）"
+art = "misty mountain peaks with pines, bamboo groves, arched stone bridges, pagodas"
+terrains = [
+  { name = "渓谷", place = "雲霧峡" },
+  { name = "仙人の山", place = "白鶴山" },
+  { name = "竹林", place = "翠竹林" },
+  { name = "大河", place = "黄竜河" },
+]
+[[region.antagonists]]
+name = "川の竜王"
+resolve = "和解"
+items = [{ before = "曇った真珠", after = "輝く竜の真珠", note = "失くした真珠を返して雨を戻してもらう" }]
+[[region.antagonists]]
+name = "九尾の狐"
+resolve = "知恵"
+items = [{ before = "古い銅鏡", after = "正体を映す銅鏡", note = "化けた姿を見破る" }]
+[[region.antagonists]]
+name = "石猿の門番"
+resolve = "知恵"
+items = [{ before = "空の瓢箪", after = "名を呼ぶと吸い込む瓢箪", note = "名前を呼ばれて答えたら負け" }]
+
+[[region]]
+id = "japanese"
+name = "日本風"
+mood = "杉の山、苔むした鳥居、竹林、古寺、霧の峠"
+naming = "和語の名前（例: 天狗岳、狐火峠、千年杉）"
+art = "cedar forests, moss-covered stone shrine gates, thatched mountain temples, misty mountain passes"
+terrains = [
+  { name = "山", place = "天狗岳" },
+  { name = "峠", place = "狐火峠" },
+  { name = "古寺", place = "苔寺" },
+  { name = "竹林", place = "月夜の竹林" },
+]
+[[region.antagonists]]
+name = "天狗"
+resolve = "知恵"
+items = [{ before = "破れた団扇", after = "天狗の羽団扇", note = "隠れ蓑と取り替えっこで出し抜く" }]
+[[region.antagonists]]
+name = "鬼"
+resolve = "倒す"
+items = [{ before = "炒っていない豆", after = "炒った豆", note = "豆をまいて追い払う" }]
+[[region.antagonists]]
+name = "大ムカデ"
+resolve = "倒す"
+items = [{ before = "折れた矢", after = "唾をつけた矢", note = "昔話の弱点" }]
+
+[[region]]
+id = "andean"
+name = "アンデス・中南米風"
+mood = "雲を突く高山、段々畑、密林の神殿、黄金"
+naming = "〜パ、〜カ、〜トルの響き（例: 雲の都ワイナ）"
+art = "high Andean mountains with terraced fields, llamas, jungle step-pyramids, golden ornaments"
+terrains = [
+  { name = "高山", place = "雲を纏う峰" },
+  { name = "密林の神殿", place = "羽毛の蛇の神殿" },
+  { name = "黄金の洞窟", place = "太陽の洞" },
+]
+[[region.antagonists]]
+name = "羽毛の蛇神"
+resolve = "和解"
+items = [{ before = "色の褪せた羽根", after = "虹色の羽根", note = "奪われた羽根を返す" }]
+[[region.antagonists]]
+name = "黄金の番人"
+resolve = "知恵"
+items = [{ before = "結び目のほどけた縄", after = "結び目で記した縄", note = "縄の結び目の暗号で扉を開ける" }]
+[[region.antagonists]]
+name = "大コンドル"
+resolve = "和解"
+items = [{ before = "空の巣の欠片", after = "取り戻した卵", note = "盗まれた卵を返す" }]
+
+[[region]]
+id = "savanna"
+name = "アフリカのサバンナ風"
+mood = "地平線まで続く草原、バオバブ、巨岩、大河"
+naming = "〜ンガ、〜ンバの響き（例: 赤い岩ムバラ）"
+art = "golden savanna grasslands, baobab trees, great granite rocks, wide rivers, round thatched huts"
+terrains = [
+  { name = "草原", place = "黄金の草原" },
+  { name = "巨岩", place = "眠る獅子の岩" },
+  { name = "大河", place = "ワニの大河" },
+]
+[[region.antagonists]]
+name = "物語を独り占めするクモ"
+resolve = "知恵"
+items = [{ before = "空のひょうたん", after = "物語でいっぱいのひょうたん", note = "知恵比べで物語を皆に返させる" }]
+[[region.antagonists]]
+name = "獅子の王"
+resolve = "和解"
+items = [{ before = "割れた太鼓", after = "鳴る太鼓", note = "太鼓で話し合いの場を開く" }]
+[[region.antagonists]]
+name = "雨を止めた大鷲"
+resolve = "和解"
+items = [{ before = "枯れた雨乞いの杖", after = "芽吹いた杖", note = "雨を返してもらう" }]
+
+[[region]]
+id = "north_american"
+name = "北米の荒野風"
+mood = "赤い岩の渓谷、大平原、メサ、星の夜空"
+naming = "自然を表す言葉の名前（例: 赤岩谷、風の台地）"
+art = "red rock canyons, mesas, vast prairies, pine-covered mountains, wide starry skies"
+terrains = [
+  { name = "渓谷", place = "赤岩谷" },
+  { name = "岩山", place = "風の台地" },
+  { name = "大平原", place = "千里の草原" },
+]
+[[region.antagonists]]
+name = "雷の鳥"
+resolve = "和解"
+items = [{ before = "抜け落ちた羽根", after = "雷を宿した羽根", note = "落とした羽根を返して嵐を鎮める" }]
+[[region.antagonists]]
+name = "いたずら者のコヨーテ"
+resolve = "知恵"
+items = [{ before = "空の袋", after = "星を詰めた袋", note = "盗まれた星を取り返す" }]
+[[region.antagonists]]
+name = "岩の巨人"
+resolve = "知恵"
+items = [{ before = "小さな石笛", after = "山を揺らす石笛", note = "眠りの歌で再び眠らせる" }]

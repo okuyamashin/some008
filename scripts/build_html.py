@@ -466,7 +466,7 @@ def build_en(src):
     {en_paragraphs(story["book"]["how_to_play"])}
     <nav class="choices">{en_choice("To begin thine adventure", 1)}</nav>
   </div>
-  <div class="page right titlepage">
+  <div class="page right titlepage{' long' if len(story["book"]["title_main"]) > 24 else ''}">
     <h1><span class="t1">{book['title_main']}</span><span class="t2">{book['title_sub']}</span></h1>
     <p class="orn">❧</p>
     <p class="being">{book['title_page_text']}</p>
@@ -642,6 +642,9 @@ html.js .spread.current, html.js .spread.leaving { display: flex; }
 .titlepage h1 { margin: 0; font-family: "Maguntia", serif; font-weight: normal; line-height: 1.1; }
 .titlepage h1 .t1 { display: block; font-size: 1.65em; }
 .titlepage h1 .t2 { display: block; font-size: 1.2em; margin-top: 0.25em; }
+/* 長い書名（25文字以上）は、扉からはみ出さないよう小さくする */
+.titlepage.long h1 .t1 { font-size: 1.35em; }
+.titlepage.long h1 .t2 { font-size: 1.05em; }
 .titlepage p { margin: 0; }
 .titlepage .orn { font-size: 1.8em; color: var(--red); margin: 0.6em 0; }
 .titlepage .being { font-style: italic; line-height: 1.45; max-width: 22em; }

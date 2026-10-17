@@ -1,0 +1,320 @@
+# Early Modern English flavor
+#
+# Same structure as story.toml (numbers, kinds, images, links).
+# Choice labels are completed as "<label>, turn to <n>."
+# Mood over correctness: modern spelling, archaic grammar where it sounds good.
+
+[book]
+title_main = "The Temple of the Feathered Serpent"
+title_sub = "and the Knotted Cord"
+subtitle = "A Gamebook wherein Thou Art the Hero"
+title_page_text = "Being a True and Most Curious Account of a Traveller's Descent to the Golden Guardian; wherein Thou Thyself art the Hero, and must Choose thy Path."
+author = "Shin Okuyama"
+year = "MMXXVI"
+copyright = "© 2026 Shin Okuyama"
+cover_image = "00_cover_v1"
+how_to_play = """
+In this book, thou art the hero.
+
+At the close of each passage thou shalt be offered a choice. Choose but one, and turn to the passage whose number is shown.
+
+Shouldst thou choose amiss, thine adventure may come to an untimely end. Fear not: take heart, and thou mayest return to the place where thou didst stray.
+
+Now let thine adventure begin. Thy journey starteth in a small village high above the clouds.
+"""
+
+[[paragraph]]
+number = 1
+key = "01c_choice"
+kind = "choice"
+image = "01c_choice_v1"
+text = """
+Thou art a traveller far from home, and in the course of thy wanderings thou comest unto Tika, a small village high above the clouds. Terraced fields climb the mountainside without end, and llamas graze at their ease.
+
+Yet every crop in the fields is turning brown and withering. The villagers stand about with empty water jars, at their wits' end.
+
+The village elder cometh forth to meet thee.
+
+"Good traveller, I pray thee, lend us thine aid. In the jungle below the mountain standeth the Temple of the Feathered Serpent. Its Golden Guardian hath shut the water gate. If the water cometh not, this village is finished."
+
+At the mountain's foot spreadeth a jungle like a green sea, and in its depths thou canst just make out the peak of a stone temple.
+"""
+choices = [
+  { label = "If thou wilt take up his cause", to = 7 },
+  { label = "If thou wouldst courteously decline", to = 12 },
+]
+
+[[paragraph]]
+number = 7
+key = "01r_result"
+kind = "result"
+image = "01r_result_v1"
+text = """
+"Thou wilt go? Heaven be praised!"
+
+The elder holdeth out an old cord bound of many-coloured strings. Many thin strands hang from it, but on every strand the knots have come undone.
+
+"Long ago the folk of this village wrote their words in knots upon a cord. Upon this cord were knotted the words that open the temple gate. But in the long years the knots have loosened."
+
+He pointeth down the mountain path.
+
+"Partway down the road to the temple standeth a waystone. The same pattern of knots is carved upon it. Tie the cord again, just as the pattern showeth."
+
+Thou bindest the cord about thy waist and settest off down the path.
+"""
+choices = [
+  { label = "To descend the mountain path", to = 4 },
+]
+
+[[paragraph]]
+number = 12
+key = "01b_bad"
+kind = "bad"
+image = "01b_bad_v1"
+back = 1
+text = """
+"So be it," saith the elder, and his shoulders droop.
+
+Thou wouldst leave the village, but a llama by the inn will not stop following thee. Drive it off as thou wilt, back it cometh.
+
+And so thou stayest a while to tend that llama. Then the other llamas take to following thee as well.
+
+Twenty years have passed. Now thou art the finest llama-herd in the village, and the herd numbereth three hundred.
+
+Alas, every llama walketh after thee in single file. Whenever thou passest through the village, the lanes are jammed from end to end.
+"""
+
+[[paragraph]]
+number = 4
+key = "02c_choice"
+kind = "choice"
+image = "02c_choice_v1"
+text = """
+As thou goest down the path the air groweth moist, and anon thou enterest a cloud forest thick with mist. Bright-feathered birds dart among the moss-clad trees.
+
+By the wayside standeth the waystone the elder spake of. Its face is carved all over with patterns of knotted cord.
+
+Thou unwindest the cord from thy waist. The loosened strands flutter in the wind.
+
+The carving is intricate, and to tie the knots exactly so will be slow work. Tie them after thine own fancy, and thou mightest finish faster, and prettier.
+
+Atop the waystone a bird tilteth its head and regardeth thee.
+"""
+choices = [
+  { label = "If thou wouldst tie pretty knots after thine own fancy", to = 14 },
+  { label = "If thou wilt tie each knot just as the carving showeth", to = 10 },
+]
+
+[[paragraph]]
+number = 10
+key = "02r_result"
+kind = "result"
+image = "02r_result_v1"
+text = """
+Tracing the carving with thy finger, thou tiest the strands one knot at a time. With every knot, the faded strings regain a little of their colour.
+
+As thou drawest the last knot tight, the whole cord groweth faintly warm.
+
+Thou hast gained the Knotted Cord!
+
+When thou runnest thy fingers over the knots, words arise in thy mind, wondrous strange.
+
+"Take the way of water. Touch not the gold. To the Guardian, show not words, but this cord."
+
+Thou bindest the cord carefully about thy waist and pressest on into the jungle.
+"""
+choices = [
+  { label = "To press on into the jungle", to = 9 },
+]
+
+[[paragraph]]
+number = 14
+key = "02b_bad"
+kind = "bad"
+image = "02b_bad_v1"
+back = 4
+text = """
+Thou tiest the strands after thine own fancy: a knot like a flower, a knot like a star. A masterly piece of work, if thou sayest so thyself.
+
+Only now there is no telling what the cord is meant to say.
+
+Having no choice, thou returnest to the village, where the folk gaze at thy knots in wonder. Thy fame spreadeth, and orders come from distant towns.
+
+Now thou art the finest knot-maker in all the highlands. Thy knots are beautiful, and they never come undone.
+
+Neither, therefore, do thy bootlaces. Thou hast worn the same boots for twenty years.
+"""
+
+[[paragraph]]
+number = 9
+key = "03c_choice"
+kind = "choice"
+image = "03c_choice_v1"
+text = """
+Deep in the jungle towereth a mighty stone temple, a stepped pyramid crowned with the image of a serpent spreading its feathered wings.
+
+Before it a great stair climbeth to the top. Along both sides sit stone jaguars in a row, and their eyes glint in the sunlight.
+
+Beside the temple there gapeth also the mouth of an old water channel, overgrown with vines. It is dry, but it seemeth to run deep beneath the temple's foundations.
+
+When thou touchest the knots upon the cord, the words come back to thee: "Take the way of water."
+"""
+choices = [
+  { label = "If thou wouldst climb the great stair", to = 13 },
+  { label = "If thou wilt follow the old water channel", to = 2 },
+]
+
+[[paragraph]]
+number = 2
+key = "03r_result"
+kind = "result"
+image = "03r_result_v1"
+text = """
+Thou partest the vines and enterest the dry channel.
+
+Upon its walls are carved feathered serpents swimming upon the waves. Once, plainly, rich waters flowed here.
+
+After a while, from beyond the stone wall, cometh the roar of rushing water. Thou art close upon the water gate.
+
+At length the channel openeth onto a broad passage. From its far end spilleth a dazzling light. The light of gold.
+"""
+choices = [
+  { label = "To go toward the light", to = 6 },
+]
+
+[[paragraph]]
+number = 13
+key = "03b_bad"
+kind = "bad"
+image = "03b_bad_v1"
+back = 9
+text = """
+Thou beginnest to climb the great stair. The stone jaguars gaze down upon thee.
+
+A hundred steps thou climbest, then two hundred. Yet the top draweth no nearer. Looking back, thou seest that for every step thou hast climbed, a step hath been added below.
+
+It was, it seemeth, an enchanted stair that groweth one step longer with every step thou takest.
+
+Thou art climbing still. Thy calves are the stoutest in all the highlands.
+
+Now and then thou lookest down, and the village children wave to thee. Thou wavest back. Then thou climbest one step more.
+"""
+
+[[paragraph]]
+number = 6
+key = "04c_choice"
+kind = "choice"
+image = "04c_choice_v1"
+text = """
+The passage endeth in a great hall whose walls and floor and ceiling are all of gold. Golden goblets, golden masks and golden llamas are heaped up like hills.
+
+At thy feet lieth a little golden feather ornament, small enough to fit in thy palm. Take one, and surely no one would notice.
+
+Yet looking closer, thou seest that the golden figures standing about the hall are all in the shape of people, frozen with startled faces and outstretched hands.
+
+In the dust of the floor are many footprints leading in. Not one leadeth out.
+
+The knots of the cord at thy waist seem to tighten.
+"""
+choices = [
+  { label = "If thou wouldst pick up the golden feather", to = 3 },
+  { label = "If thou wilt touch no gold and cross the hall", to = 11 },
+]
+
+[[paragraph]]
+number = 11
+key = "04r_result"
+kind = "result"
+image = "04r_result_v1"
+text = """
+Turning thine eyes from the gold, thou passest straight through the hall.
+
+It seemeth the eyes of the golden figures follow thy back. Yet nothing befalleth thee.
+
+At the far end of the hall standeth a great stone door, and from beyond it soundeth the rush of water. This is the water gate.
+
+Before it standeth a giant of gold. Upon its head is a crown of a serpent with feathered wings outspread, and its eyes shine like two suns.
+
+It is the Golden Guardian.
+"""
+choices = [
+  { label = "To step before the Guardian", to = 15 },
+]
+
+[[paragraph]]
+number = 3
+key = "04b_bad"
+kind = "bad"
+image = "04b_bad_v1"
+back = 6
+text = """
+Thou pickest up the golden feather. It is heavy in thy hand.
+
+In that instant thy fingertips gleam. Thy fingers are turning to gold, and the gleam spreadeth from wrist to elbow to shoulder before thine eyes.
+
+Ere thou knowest it, thou art a golden statue, the feather in thy hand and a startled look upon thy face.
+
+Long years pass. Among the travellers who visit the temple a saying ariseth: rub the nose of the golden statue with the startled face, and good fortune shall follow.
+
+And so thy nose alone shineth bright as a new coin.
+"""
+
+[[paragraph]]
+number = 15
+key = "05c_choice"
+kind = "choice"
+image = "05c_choice_v1"
+text = """
+The Golden Guardian speaketh, in a voice like the rumbling of the earth.
+
+"Child of men. Show me the word that openeth the water gate. Whoso hath not the true word, him shall I turn to gold."
+
+About the Guardian's feet lie more golden figures with startled faces, like those in the hall.
+
+Thou ponderest. Shouldst thou answer with whatever words come to mind? "Open." "Please." "Give back the water." Mayhap one of them would serve.
+
+The knots of the cord at thy waist are faintly warm. Thou rememberest what the cord told thee at the waystone.
+
+"To the Guardian, show not words, but this cord."
+"""
+choices = [
+  { label = "If thou wouldst answer aloud with whatever words come to mind", to = 5 },
+  { label = "If thou wilt hold out the knotted cord", to = 8 },
+]
+
+[[paragraph]]
+number = 8
+key = "05r_ending"
+kind = "ending"
+image = "05r_ending_v1"
+text = """
+In silence, thou holdest out the knotted cord.
+
+The Golden Guardian taketh it in its great fingers and traceth the knots one by one, and the light in its eyes groweth softer.
+
+"So... the village had not forgotten the pact after all."
+
+Knotted into the cord was the ancient pact: the temple would send water to the village, and once a year the village would bring the temple flowers and songs. When the village forgot its festival, the Guardian shut the gate.
+
+The Guardian raiseth its hand, and the water gate openeth. The water roareth out, climbeth the channels, and floweth up to water the terraced fields of the highlands.
+
+From that year on, the festival of flowers and songs was held again in Tika. And the Guardian, they say, hath learned to smile a little.
+"""
+
+[[paragraph]]
+number = 5
+key = "05b_bad"
+kind = "bad"
+image = "05b_bad_v1"
+back = 15
+text = """
+"Open!" thou criest. The Guardian shaketh its head.
+
+"Please!" No. "Give back the water!" No. "Open sesame!" The Guardian tilteth its head.
+
+Thou shoutest every word thou canst think of. Strangely, the Guardian turneth thee not to gold. It hath come to enjoy hearing the wrong words.
+
+Today, as every day, thou shoutest words in the temple. Every wrong word thou writest down in a ledger.
+
+The ledger now runneth to twenty volumes. It standeth in the village library as A Dictionary of Words That Do Not Open the Water Gate.
+"""
